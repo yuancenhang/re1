@@ -7,12 +7,17 @@ import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.apache.ibatis.session.SqlSessionFactoryBuilder;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.PrintWriter;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
 
 public class UtilOne {
@@ -116,6 +121,40 @@ public class UtilOne {
         } catch (NoSuchAlgorithmException e) {
             e.printStackTrace();
             return "";
+        }
+    }
+
+    /**
+     * 输出一个boolean到浏览器
+     * @param response 传入response
+     */
+    public static void printFalse(HttpServletResponse response,boolean b){
+        Map<String,Object> map = new HashMap<>();
+        map.put("ok",b);
+        String json = toJson(map);
+        print(response,json);
+    }
+
+    /**
+     * 把实体对象转成json并输出到浏览器
+     * @param response 响应对象
+     * @param obj 需要转成json的对象
+     */
+    public static void printJson(HttpServletResponse response,Object obj){
+        String json = toJson(obj);
+        print(response,json);
+    }
+
+    /**
+     * 封装好的输出json到浏览器的方法
+     * @param response 响应对象
+     * @param o 输出的内容
+     */
+    private static void print(HttpServletResponse response,Object o){
+        try {
+            response.getWriter().print(o);
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 }

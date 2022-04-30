@@ -22,7 +22,31 @@
 </head>
 <body>
     <script type="text/javascript" >
-
+        $(function (){
+            //加载完成让输入框获取焦点
+            $("username").onblur;
+            //登陆的ajax请求
+            $("btnDl").on("click",function (){
+                $.ajax({
+                    url : "User/login",
+                    data : {
+                        "username" : $("username").val(),
+                        "password" : $("password").val()
+                    },
+                    dataType : "json",
+                    success : function (data){
+                        //{ok:false,msg:无法登陆的原因}
+                        if (data.ok === false){
+                            $(err).innerHTML = data.msg;
+                            return false;
+                        }
+                        //执行到这里说明没问题，跳转页面
+                        window.location.href = "in/tishi.html";
+                    },
+                    type : "post"
+                })
+            })
+        })
     </script>
 
     <div id="beijing">
@@ -32,7 +56,7 @@
                 <form>
                     <label for="username">账号</label><input type="text" id="username"><br/><br/>
                     <label for="password">密码</label><input type="password" id="password"><br/>
-                    <div id="err" style="color: red">这里是错误信息</div>
+                    <div id="err" style="color: red"></div>
                     <input type="button" value="登陆" id="btnDl">
                 </form>
             </span>

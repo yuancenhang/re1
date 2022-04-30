@@ -4,8 +4,8 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.hang.crm.settings.dao.UserDao">
-    <select id="selectById" parameterType="java.lang.String" resultType="User">
-        select * from t_student where id = #{id}
+    <select id="login" resultType="User">
+        select * from crm where loginAct = #{loginAct}
     </select>
 
     <!--当某个字段名和实体类属性名不一样时，可以用 as 起别名
