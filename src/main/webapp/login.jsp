@@ -10,7 +10,8 @@
     <style type="text/css">
         #beijing{
             background-image: url("img/login.png");
-            margin: auto;
+            width: 100%;
+            height: 671px;
         }
         #btnDl{
             background-color: aquamarine;
