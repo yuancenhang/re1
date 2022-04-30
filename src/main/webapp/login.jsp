@@ -7,18 +7,36 @@
     <title>登陆页面</title>
     <script type="text/javascript" src="jquery-3.6.0.js"></script>
     <base href=<%=basePath%>>
-
+    <style type="text/css">
+        #beijing{
+            background-image: url("img/login.png");
+            margin: auto;
+        }
+        #btnDl{
+            background-color: aquamarine;
+            border: black;
+            width: 10%;
+        }
+    </style>
 </head>
 <body>
     <script type="text/javascript" >
 
     </script>
-    <h1>这里是登陆页面</h1>
-    <div style="background-image:url('WEB-INF/img/login.png')" >div</div>
-    <form action="">
-        <input type="text" id="username">
-        <input type="password" id="password">
-        <input type="button" value="登陆" id="btnDl">
-    </form>
+
+    <div id="beijing">
+        <center>
+            <h1>欢迎来到CRM登陆页面</h1>
+            <span style="background-color: burlywood">
+                <form>
+                    <label for="username">账号</label><input type="text" id="username"><br/><br/>
+                    <label for="password">密码</label><input type="password" id="password"><br/>
+                    <div id="err" style="color: red">这里是错误信息</div>
+                    <input type="button" value="登陆" id="btnDl">
+                </form>
+            </span>
+        </center>
+    </div>
+
 </body>
 </html>
