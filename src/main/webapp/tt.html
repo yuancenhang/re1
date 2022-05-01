@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>登陆页面</title>
+    <script type="text/javascript" src="../../jquery-3.6.0.js"></script>
+
+    <style type="text/css">
+        #beijing{
+            background-image: url("img/login.png");
+            background-size: auto;
+            background-repeat: no-repeat;
+        }
+        #btnDl{
+            background-color: aquamarine;
+            border: black;
+            width: 178px;
+        }
+
+    </style>
+</head>
+<body id="beijing" >
+
+    <div>
+        <center>
+            <div>
+                <h1>欢迎来到CRM登陆页面</h1>
+            </div>
+            <div style="width: 300px;height: 250px ;border: aliceblue">
+                <div>
+                    <label for="username"></label><input type="text" id="username" placeholder="用户名"><br/><br/>
+                </div>
+                <div>
+                    <label for="password"></label><input type="password" id="password" placeholder="密码"><br/>
+                </div>
+                <div>
+                    <span id="err" style="color: red"></span>
+                </div>
+                <div>
+                    <button type="button" id="btnDl">登陆</button>
+                </div>
+            </div>
+        </center>
+    </div>
+
+</body>
+</html>
