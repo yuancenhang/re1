@@ -11,14 +11,12 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User login(String username, String password,String ip) throws loginException{
-        System.out.println("service方法开始");
         User user = userDao.login(username);
         if (null == user) throw new loginException("用户不存在");
         if (!(user.getLoginPwd().equals(password))) throw new loginException("密码错误");
         if (!(user.getAllowIps().contains(ip))) throw new loginException("ip地址不允许登陆");
         if ("0".equals(user.getLockState())) throw new loginException("账号锁定");
         if (user.getExpireTime().compareTo(UtilOne.getTime()) < 0) throw new loginException("账号过期");
-        System.out.println("service方法结束");
         return user;
     }
 }

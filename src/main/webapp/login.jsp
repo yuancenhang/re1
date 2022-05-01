@@ -70,7 +70,7 @@
                         return false;
                     }
                     //执行到这里说明没问题，跳转页面
-                    window.location.href = "in/tishi.html";
+                    window.location.href = "work/index.html";
                 },
                 type : "post"
             })
