@@ -14,12 +14,14 @@ public class UserServlet extends HttpServlet {
     @Override
     protected void service(HttpServletRequest req, HttpServletResponse resp)  {
         System.out.println("开始处理");
-        if ("/User/login".equals(req.getRequestURI())) {
+        System.out.println(req.getRequestURI());
+        if ("/crm/User/login".equals(req.getRequestURI())) {
             login(req,resp);
         }
     }
 
     private void login(HttpServletRequest request,HttpServletResponse response){
+        System.out.println("login方法开始");
         String username = request.getParameter("username");
         String password = request.getParameter("password");
         String ip = request.getRemoteAddr();
@@ -31,14 +33,17 @@ public class UserServlet extends HttpServlet {
         try {
             User user = userService.login(username,password,ip);
             request.getSession().setAttribute("user",user);
-            UtilOne.printFalse(response,true);
+            UtilOne.printBoolean(response,true);
+            System.out.println("login方法正常结束");
         } catch (loginException e) {
             e.printStackTrace();
             Map<String,Object> map = new HashMap<>();
             map.put("ok",false);
             map.put("msg",e.getMessage());
             UtilOne.printJson(response,map);
+            System.out.println("login方法异常结束");
         }
 
     }
+
 }

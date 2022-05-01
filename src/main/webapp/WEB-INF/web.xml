@@ -3,6 +3,20 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_4_0.xsd"
          version="4.0">
+    <!--过滤乱码的filter-->
+    <filter>
+        <filter-name>EncodingFilter</filter-name>
+        <filter-class>com.hang.crm.filter.EncodingFilter</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>EncodingFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
+    <!--首页-->
+    <welcome-file-list>
+        <welcome-file>index.html</welcome-file>
+    </welcome-file-list>
+    <!--User块-->
     <servlet>
         <servlet-name>UserServlet</servlet-name>
         <servlet-class>com.hang.crm.settings.web.controller.UserServlet</servlet-class>
@@ -11,7 +25,5 @@
         <servlet-name>UserServlet</servlet-name>
         <url-pattern>/User/login</url-pattern>
     </servlet-mapping>
-    <welcome-file-list>
-        <welcome-file>index.html</welcome-file>
-    </welcome-file-list>
+
 </web-app>

@@ -128,7 +128,7 @@ public class UtilOne {
      * 输出一个boolean到浏览器
      * @param response 传入response
      */
-    public static void printFalse(HttpServletResponse response,boolean b){
+    public static void printBoolean(HttpServletResponse response,boolean b){
         Map<String,Object> map = new HashMap<>();
         map.put("ok",b);
         String json = toJson(map);

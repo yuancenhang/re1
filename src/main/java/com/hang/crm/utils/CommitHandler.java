@@ -22,7 +22,10 @@ public class CommitHandler implements InvocationHandler {
             result = method.invoke(target,args);
             session.commit();
         }catch (Exception e){
+            assert session != null;
             session.rollback();
+            //这个异常不能处理，应该抛出去
+            throw e.getCause();
         }
         finally {
             UtilOne.closeSqlSession(session);

@@ -29,6 +29,6 @@
         </environment>
     </environments>
     <mappers>
-        <package name="mapper"/>
+        <package name="com.hang.crm.settings.dao"/>
     </mappers>
 </configuration>
