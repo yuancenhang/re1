@@ -3,19 +3,31 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_4_0.xsd"
          version="4.0">
-    <!--过滤乱码的filter-->
+    <!--过滤乱码的filter，所有的servlet后缀都加上sv-->
     <filter>
         <filter-name>EncodingFilter</filter-name>
         <filter-class>com.hang.crm.filter.EncodingFilter</filter-class>
     </filter>
     <filter-mapping>
         <filter-name>EncodingFilter</filter-name>
-        <url-pattern>/*</url-pattern>
+        <url-pattern>*.sv</url-pattern>
     </filter-mapping>
+    <!--防止恶意登陆的filter，所有的servlet后缀都加上sv-->
+    <filter>
+        <filter-name>SafeFilter</filter-name>
+        <filter-class>com.hang.crm.filter.SafeFilter</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>SafeFilter</filter-name>
+        <url-pattern>*.sv</url-pattern>
+        <url-pattern>*.jsp</url-pattern>
+    </filter-mapping>
+
     <!--首页-->
     <welcome-file-list>
         <welcome-file>index.html</welcome-file>
     </welcome-file-list>
+
     <!--User块-->
     <servlet>
         <servlet-name>UserServlet</servlet-name>
@@ -23,7 +35,17 @@
     </servlet>
     <servlet-mapping>
         <servlet-name>UserServlet</servlet-name>
-        <url-pattern>/User/login</url-pattern>
+        <url-pattern>/User/login.sv</url-pattern>
+    </servlet-mapping>
+
+    <!--Activity块-->
+    <servlet>
+        <servlet-name>ActivityController</servlet-name>
+        <servlet-class>com.hang.crm.work.controller.ActivityController</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>ActivityController</servlet-name>
+        <url-pattern>/work/activity/xxx.sv</url-pattern>
     </servlet-mapping>
 
 </web-app>

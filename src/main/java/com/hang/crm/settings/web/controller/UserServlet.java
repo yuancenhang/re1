@@ -1,7 +1,7 @@
 package com.hang.crm.settings.web.controller;
 
 import com.hang.crm.settings.domain.User;
-import com.hang.crm.settings.exception.loginException;
+import com.hang.crm.exception.loginException;
 import com.hang.crm.settings.service.UserService;
 import com.hang.crm.settings.service.impl.UserServiceImpl;
 import com.hang.crm.utils.UtilOne;
@@ -14,7 +14,7 @@ public class UserServlet extends HttpServlet {
     @Override
     protected void service(HttpServletRequest req, HttpServletResponse resp)  {
         System.out.println(req.getRequestURI());
-        if ("/crm/User/login".equals(req.getRequestURI())) {
+        if ("/crm/User/login.sv".equals(req.getRequestURI())) {
             login(req,resp);
         }
     }

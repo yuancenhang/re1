@@ -26,6 +26,10 @@
     <script type="text/javascript" >
 
         $(function (){
+            //在任何时候，都把登陆页作为顶层窗口
+            if (window.top!=window){
+                window.top.location = window.location;
+            }
             var user = $("#username");
             var pass = $("#password");
             //清空输入框
@@ -57,7 +61,7 @@
                 return false;
             }
             $.ajax({
-                url : "User/login",
+                url : "User/login.sv",
                 data : {
                     "username" : u,
                     "password" : p
@@ -70,7 +74,7 @@
                         return false;
                     }
                     //执行到这里说明没问题，跳转页面
-                    window.location.href = "in/tishi.html";
+                    window.location.href = "work/index.html";
                 },
                 type : "post"
             })
