@@ -32,6 +32,7 @@ public class UserServlet extends HttpServlet {
             User user = userService.login(username,password,ip);
             request.getSession().setAttribute("user",user);
             UtilOne.printBoolean(response,true);
+            System.out.println(user);
         } catch (loginException e) {
             e.printStackTrace();
             Map<String,Object> map = new HashMap<>();

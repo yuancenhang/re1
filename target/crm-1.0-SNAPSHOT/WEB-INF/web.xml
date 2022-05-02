@@ -45,7 +45,7 @@
     </servlet>
     <servlet-mapping>
         <servlet-name>ActivityController</servlet-name>
-        <url-pattern>/work/activity/xxx.sv</url-pattern>
+        <url-pattern>/work/activity/getUserList.sv</url-pattern>
     </servlet-mapping>
 
 </web-app>

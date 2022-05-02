@@ -67,6 +67,7 @@
                     "password" : p
                 },
                 dataType : "json",
+                type : "post",
                 success : function (data){
                     //{ok:false,msg:无法登陆的原因}
                     if (data.ok === false){
@@ -74,9 +75,8 @@
                         return false;
                     }
                     //执行到这里说明没问题，跳转页面
-                    window.location.href = "work/index.html";
-                },
-                type : "post"
+                    window.location.href = "work/index.jsp";
+                }
             })
         }
     </script>

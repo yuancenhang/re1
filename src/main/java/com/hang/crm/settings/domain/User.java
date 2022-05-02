@@ -15,6 +15,25 @@ public class User {
     String editTime;
     String editBy;
 
+    @Override
+    public String toString() {
+        return "User{" +
+                "id='" + id + '\'' +
+                ", loginAct='" + loginAct + '\'' +
+                ", name='" + name + '\'' +
+                ", loginPwd='" + loginPwd + '\'' +
+                ", email='" + email + '\'' +
+                ", expireTime='" + expireTime + '\'' +
+                ", lockState='" + lockState + '\'' +
+                ", deptno='" + deptno + '\'' +
+                ", allowIps='" + allowIps + '\'' +
+                ", createTime='" + createTime + '\'' +
+                ", createBy='" + createBy + '\'' +
+                ", editTime='" + editTime + '\'' +
+                ", editBy='" + editBy + '\'' +
+                '}';
+    }
+
     public User() {
     }
 

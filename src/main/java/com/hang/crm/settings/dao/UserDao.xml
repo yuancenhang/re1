@@ -8,6 +8,11 @@
         select * from t_user where loginAct = #{loginAct}
     </select>
 
+    <select id="getUserList" resultType="User">
+        select * from t_user
+    </select>
+
+
     <!--当某个字段名和实体类属性名不一样时，可以用 as 起别名
     <select id="selectByIdAsChinese" parameterType="java.lang.String" resultType="Student">
         select name as 'Fname' from t_student where id = #{id}

@@ -6,6 +6,8 @@ import com.hang.crm.exception.loginException;
 import com.hang.crm.settings.service.UserService;
 import com.hang.crm.utils.UtilOne;
 
+import java.util.List;
+
 public class UserServiceImpl implements UserService {
     UserDao userDao = UtilOne.getSqlSession().getMapper(UserDao.class);
 
@@ -18,5 +20,11 @@ public class UserServiceImpl implements UserService {
         if ("0".equals(user.getLockState())) throw new loginException("账号锁定");
         if (user.getExpireTime().compareTo(UtilOne.getTime()) < 0) throw new loginException("账号过期");
         return user;
+    }
+
+    @Override
+    public List<User> getUserList() {
+        UserDao ud = UtilOne.getSqlSession().getMapper(UserDao.class);
+        return ud.getUserList();
     }
 }
