@@ -7,7 +7,13 @@
     <select id="" resultType="U">
         select * from t_user where loginAct = #{loginAct}
     </select>
-
+    <insert id="activitySave" parameterType="activity">
+        insert into t_activity (
+            id,owner,name,startDate,endDate,cost,description,createTime,createBy
+        ) values (
+            #{id},#{owner},#{name},#{startDate},#{endDate},#{cost},#{description},#{createTime},#{createBy}
+        )
+    </insert>
 
 
 </mapper>

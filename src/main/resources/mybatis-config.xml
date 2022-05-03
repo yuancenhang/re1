@@ -14,6 +14,7 @@
 
         <!--这种方式可以指定一个包下的所有实体类，别名就是类名，不区分大小写，不能自己起别名，-->
         <package name="com/hang/crm/settings/domain"/>
+        <package name="com/hang/crm/work/domain"/>
     </typeAliases>
 
     <environments default="development">
@@ -30,5 +31,6 @@
     </environments>
     <mappers>
         <package name="com.hang.crm.settings.dao"/>
+        <!--,com.hang.crm.work.dao-->
     </mappers>
 </configuration>

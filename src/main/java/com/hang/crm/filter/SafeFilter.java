@@ -22,14 +22,14 @@ public class SafeFilter implements Filter {
             System.out.println("user为null");
             if ("/User/login.sv".equals(path) || "/login.jsp".equals(path) ||"/index.html".equals(path)) {
                 System.out.println("登陆，不管");
-                filterChain.doFilter(servletRequest, servletResponse);
+                filterChain.doFilter(servletRequest,servletResponse);
                 return;
             }
             System.out.println("非法访问");
             response.sendRedirect(request.getContextPath() + "/login.jsp");
         }
         System.out.println("放行");
-        filterChain.doFilter(servletRequest, servletResponse);
+        filterChain.doFilter(servletRequest,servletResponse);
 
         /*System.out.println(request.getServletPath());  // /login.jsp
         System.out.println(request.getRequestURI());  // /crm/login.jsp

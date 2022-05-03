@@ -26,8 +26,12 @@ public class UtilOne {
 
     static{
         try {
+            System.out.println("开始static");
             InputStream in = Resources.getResourceAsStream("mybatis-config.xml");
+            System.out.println("获取流结束");
             factory = new SqlSessionFactoryBuilder().build(in);
+            System.out.println("获取factory结束");
+            System.out.println("结束static");
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -106,6 +110,7 @@ public class UtilOne {
      */
     public static String getMD5(String password){
         try {
+            System.out.println("开始md5");
             MessageDigest md = MessageDigest.getInstance("md5");
             byte[] result = md.digest(password.getBytes());
             StringBuffer sb = new StringBuffer();
@@ -117,6 +122,7 @@ public class UtilOne {
                 }
                 sb.append(s);
             }
+            System.out.println("结束md5");
             return sb.toString();
         } catch (NoSuchAlgorithmException e) {
             e.printStackTrace();

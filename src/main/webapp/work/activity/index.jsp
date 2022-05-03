@@ -17,7 +17,21 @@
 <script type="text/javascript">
 
 	$(function(){
+		//创建活动按钮点击事件
 		$("#btn-create").on("click",function (){
+			//每次点开清空表单中的信息
+			$("#create-Activity")[0].reset();
+
+			//给两个日期框加上时间选择器插件
+			$(".time").datetimepicker({
+				minView:"month",
+				language:'zh-CN',
+				format:'yyyy-mm-dd',
+				autoclose:true,
+				todayBtn:true,
+				pickerPosition:"bottom-left"
+			})
+
 			//从数据库获取user名字填进下拉框中
 			$.ajax({
 				url:"work/activity/getUserList.sv",
@@ -34,6 +48,37 @@
 			$("#createActivityModal").modal("show");
 			$("#create-marketActivityOwner").val("${user.id}")
 		})
+
+		//市场活动的创建活动按钮被点击
+		$("#saveBtn").on("click",function () {
+			//把表单提交到服务器保存
+			$.ajax({
+				url:"work/activity/save.sv",
+				type:"post",
+				dataType: "json",
+				data:{
+					"owner":$("#create-marketActivityOwner").val(),
+					"name":$("#create-marketActivityName").val(),
+					"startDate":$("#create-startTime").val(),
+					"endDate":$("#create-endTime").val(),
+					"cost":$("#create-cost").val(),
+					"description":$("#create-describe").val()
+				},
+				success:function (data){
+					if (data.ok){
+						alert("创建成功")
+						//关闭模态窗口
+						$("#createActivityModal").modal("hide");
+						//刷新展示列表
+
+					}else {
+						alert("创建失败,请检查")
+					}
+				}
+			})
+		})
+
+
 	});
 	
 </script>
@@ -53,7 +98,7 @@
 				</div>
 				<div class="modal-body">
 				
-					<form class="form-horizontal" role="form">
+					<form class="form-horizontal" role="form" id="create-Activity">
 					
 						<div class="form-group">
 							<label for="create-marketActivityOwner" class="col-sm-2 control-label">所有者<span style="font-size: 15px; color: red;">*</span></label>
@@ -70,11 +115,11 @@
 						<div class="form-group">
 							<label for="create-startTime" class="col-sm-2 control-label">开始日期</label>
 							<div class="col-sm-10" style="width: 300px;">
-								<input type="text" class="form-control" id="create-startTime">
+								<input type="text" class="form-control time" id="create-startTime">
 							</div>
 							<label for="create-endTime" class="col-sm-2 control-label">结束日期</label>
 							<div class="col-sm-10" style="width: 300px;">
-								<input type="text" class="form-control" id="create-endTime">
+								<input type="text" class="form-control time" id="create-endTime">
 							</div>
 						</div>
                         <div class="form-group">
@@ -96,7 +141,7 @@
 				</div>
 				<div class="modal-footer">
 					<button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
-					<button type="button" class="btn btn-primary" data-dismiss="modal">保存</button>
+					<button type="button" class="btn btn-primary" id="saveBtn">保存</button>
 				</div>
 			</div>
 		</div>

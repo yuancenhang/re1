@@ -13,7 +13,6 @@ import java.util.Map;
 public class UserServlet extends HttpServlet {
     @Override
     protected void service(HttpServletRequest req, HttpServletResponse resp)  {
-        System.out.println(req.getRequestURI());
         if ("/crm/User/login.sv".equals(req.getRequestURI())) {
             login(req,resp);
         }
@@ -23,12 +22,12 @@ public class UserServlet extends HttpServlet {
         String username = request.getParameter("username");
         String password = request.getParameter("password");
         String ip = request.getRemoteAddr();
-
-        System.out.println(ip);
-
+        System.out.println("密码是"+password);
         password = UtilOne.getMD5(password);
+        System.out.println("密码是"+password);
         UserService userService = (UserService) UtilOne.getProxyOfCommit(new UserServiceImpl());
         try {
+            System.out.println("进入try");
             User user = userService.login(username,password,ip);
             request.getSession().setAttribute("user",user);
             UtilOne.printBoolean(response,true);
