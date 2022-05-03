@@ -22,16 +22,12 @@ public class UserServlet extends HttpServlet {
         String username = request.getParameter("username");
         String password = request.getParameter("password");
         String ip = request.getRemoteAddr();
-        System.out.println("密码是"+password);
         password = UtilOne.getMD5(password);
-        System.out.println("密码是"+password);
         UserService userService = (UserService) UtilOne.getProxyOfCommit(new UserServiceImpl());
         try {
-            System.out.println("进入try");
             User user = userService.login(username,password,ip);
             request.getSession().setAttribute("user",user);
             UtilOne.printBoolean(response,true);
-            System.out.println(user);
         } catch (loginException e) {
             e.printStackTrace();
             Map<String,Object> map = new HashMap<>();

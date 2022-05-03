@@ -4,16 +4,34 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.hang.crm.work.dao.ActivityDao">
-    <select id="" resultType="U">
+    <!--<select id="" resultType="">
         select * from t_user where loginAct = #{loginAct}
-    </select>
-    <insert id="activitySave" parameterType="activity">
+    </select>-->
+    <insert id="activitySave" parameterType="Activity">
         insert into t_activity (
             id,owner,name,startDate,endDate,cost,description,createTime,createBy
         ) values (
             #{id},#{owner},#{name},#{startDate},#{endDate},#{cost},#{description},#{createTime},#{createBy}
         )
     </insert>
+
+    <select id="getActivityList" parameterType="map" resultType="Activity">
+        select * from t_activity
+        <where>
+            <if test="owner!=null and owner!=''">
+                and owner = ${owner}
+            </if>
+            <if test="name!=null and name!=''">
+                and name = ${name}
+            </if>
+            <if test="startDate!=null and startDate!=''">
+                and startDate = ${startDate}
+            </if>
+            <if test="endDate!=null and endDate!=''">
+                and endDate = ${endDate}
+            </if>
+        </where>
+    </select>
 
 
 </mapper>

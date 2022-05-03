@@ -15,8 +15,41 @@
 <script type="text/javascript" src="jquery/bootstrap-datetimepicker-master/locale/bootstrap-datetimepicker.zh-CN.js"></script>
 
 <script type="text/javascript">
-
+	//封装的刷新市场活动列表的方法,分页显示
+	function loadActivityList(pageNo,pageSize){
+		$.ajax({
+			url:"work/activity/pageList.sv",
+			type:"post",
+			dataType: "json",
+			data:{
+				"pageNo":pageNo,
+				"pageSize":pageSize,
+				"name":$.trim($("#create-marketActivityName").val()),
+				"owner":$.trim($("#create-marketActivityOwner").val()),
+				"startDate":$.trim($("#create-startTime").val()),
+				"endDate":$.trim($("#create-endTime").val())
+			},
+			success:function (data){
+				//查到的总条数total，activity的集合
+				var html = "";
+				$.each(data.list,function (i,n) {
+					html += '<tr class="active">';
+					html += '<td><input type="checkbox" /></td>';
+					html += '<td><a style="text-decoration: none; cursor: pointer;" onclick="window.location.href=\'work/activity/detail.html\';">'+n.name+'</a></td>';
+					html += '<td>'+n.owner+'</td>';
+					html += '<td>'+n.startDate+'</td>';
+					html += '<td>'+n.endDate+'</td>';
+					html += '</tr>';
+				})
+				$("#activityList").html(html);
+				$("#total").html(data.total);
+			}
+		})
+	}
 	$(function(){
+		//刷新展示列表
+		loadActivityList(1,3);
+
 		//创建活动按钮点击事件
 		$("#btn-create").on("click",function (){
 			//每次点开清空表单中的信息
@@ -49,7 +82,7 @@
 			$("#create-marketActivityOwner").val("${user.id}")
 		})
 
-		//市场活动的创建活动按钮被点击
+		//市场活动的保存活动按钮被点击
 		$("#saveBtn").on("click",function () {
 			//把表单提交到服务器保存
 			$.ajax({
@@ -57,20 +90,20 @@
 				type:"post",
 				dataType: "json",
 				data:{
-					"owner":$("#create-marketActivityOwner").val(),
-					"name":$("#create-marketActivityName").val(),
-					"startDate":$("#create-startTime").val(),
-					"endDate":$("#create-endTime").val(),
-					"cost":$("#create-cost").val(),
-					"description":$("#create-describe").val()
+					"owner":$.trim($("#create-marketActivityOwner").val()),
+					"name":$.trim($("#create-marketActivityName").val()),
+					"startDate":$.trim($("#create-startTime").val()),
+					"endDate":$.trim($("#create-endTime").val()),
+					"cost":$.trim($("#create-cost").val()),
+					"description":$.trim($("#create-describe").val())
 				},
 				success:function (data){
 					if (data.ok){
 						alert("创建成功")
+						//刷新展示列表
+						loadActivityList(1,3);
 						//关闭模态窗口
 						$("#createActivityModal").modal("hide");
-						//刷新展示列表
-
 					}else {
 						alert("创建失败,请检查")
 					}
@@ -78,6 +111,11 @@
 			})
 		})
 
+		//查询按钮被单击
+		$("#serachBtn").on("click",function (){
+			//刷新展示列表
+			loadActivityList(1,3);
+		})
 
 	});
 	
@@ -256,7 +294,7 @@
 				    </div>
 				  </div>
 				  
-				  <button type="submit" class="btn btn-default">查询</button>
+				  <button type="button" id="serachBtn" class="btn btn-default">查询</button>
 				  
 				</form>
 			</div>
@@ -279,7 +317,8 @@
 							<td>结束日期</td>
 						</tr>
 					</thead>
-					<tbody>
+					<%--已经存在的市场活动的列表--%>
+					<tbody id="activityList">
 						<tr class="active">
 							<td><input type="checkbox" /></td>
 							<td><a style="text-decoration: none; cursor: pointer;" onclick="window.location.href='detail.html';">发传单</a></td>
@@ -300,13 +339,13 @@
 			
 			<div style="height: 50px; position: relative;top: 30px;">
 				<div>
-					<button type="button" class="btn btn-default" style="cursor: default;">共<b>50</b>条记录</button>
+					<button type="button" class="btn btn-default" style="cursor: default;">共<b id="total">?</b>条记录</button>
 				</div>
 				<div class="btn-group" style="position: relative;top: -34px; left: 110px;">
 					<button type="button" class="btn btn-default" style="cursor: default;">显示</button>
 					<div class="btn-group">
-						<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
-							10
+						<button id="pageSize" type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+							5
 							<span class="caret"></span>
 						</button>
 						<ul class="dropdown-menu" role="menu">

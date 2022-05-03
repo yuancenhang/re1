@@ -1,5 +1,7 @@
 package com.hang.crm.filter;
 
+import com.hang.crm.settings.domain.User;
+
 import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -17,18 +19,16 @@ public class SafeFilter implements Filter {
         HttpServletResponse response = (HttpServletResponse) servletResponse;
         String path = request.getServletPath();
         //如果访问的是登陆相关，放行
+        if ("/User/login.sv".equals(path) || "/login.jsp".equals(path) ||"/index.html".equals(path)) {
+            filterChain.doFilter(servletRequest,servletResponse);
+            return;
+        }
+
         HttpSession session = request.getSession();
-        if (null == session.getAttribute("user")) {
-            System.out.println("user为null");
-            if ("/User/login.sv".equals(path) || "/login.jsp".equals(path) ||"/index.html".equals(path)) {
-                System.out.println("登陆，不管");
-                filterChain.doFilter(servletRequest,servletResponse);
-                return;
-            }
-            System.out.println("非法访问");
+        User user = (User) session.getAttribute("user");
+        if (null == user) {
             response.sendRedirect(request.getContextPath() + "/login.jsp");
         }
-        System.out.println("放行");
         filterChain.doFilter(servletRequest,servletResponse);
 
         /*System.out.println(request.getServletPath());  // /login.jsp

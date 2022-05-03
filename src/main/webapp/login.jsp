@@ -45,7 +45,7 @@
             })
 
             //按回车键登陆
-            pass.onkeydown=function (event) {
+            pass.keydown=function (event) {
                 if(event.keyCode === 13){
                     login();
                 }
