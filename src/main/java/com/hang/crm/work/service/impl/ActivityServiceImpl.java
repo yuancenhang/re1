@@ -10,16 +10,16 @@ import java.util.List;
 import java.util.Map;
 
 public class ActivityServiceImpl implements ActivityService {
-    ActivityDao ad = UtilOne.getSqlSession().getMapper(ActivityDao.class);
+    ActivityDao dao = UtilOne.getSqlSession().getMapper(ActivityDao.class);
     @Override
     public Integer activitySave(Activity activity) {
-        return ad.activitySave(activity);
+        return dao.activitySave(activity);
     }
 
     @Override
     public PageVo getActivityList(Map<String, Object> map) {
-        List<Activity> alist = ad.getActivityList();
-        Integer total = alist.size();
+        List<Activity> alist = dao.getActivityList(map);
+        Integer total = dao.selectTotal(map);
         PageVo<Activity> pageVo = new PageVo<>();
         pageVo.setList(alist);
         pageVo.setTotal(total);

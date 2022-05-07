@@ -36,23 +36,33 @@ public class ActivityController extends HttpServlet {
         System.out.println("进入到activity");
 
         String pageNo = request.getParameter("pageNo");
+        System.out.println(pageNo);
         int no = Integer.parseInt(pageNo);
+        System.out.println(no);
+
         String pageSize = request.getParameter("pageSize");
+        System.out.println("pageSize=="+pageSize);
         int size = Integer.parseInt(pageSize);
+        System.out.println("size=="+size);
         no = (no-1)*size;
+        System.out.println("no=="+no);
 
         String name = request.getParameter("name");
         String owner = request.getParameter("owner");
         String startDate = request.getParameter("startDate");
         String endDate = request.getParameter("endDate");
-        Map<String,Object> map = new HashMap<>();
 
+        Map<String,Object> map = new HashMap<>();
         map.put("pageNo",no);
         map.put("pageSize",size);
         map.put("name",name);
+        System.out.println("name=="+name);
         map.put("owner",owner);
+        System.out.println("owner=="+owner);
         map.put("startDate",startDate);
+        System.out.println("startDate=="+startDate);
         map.put("endDate",endDate);
+        System.out.println("endDate=="+endDate);
 
         ActivityService as = (ActivityService) UtilOne.getProxyOfCommit(new ActivityServiceImpl());
         PageVo pageVo = as.getActivityList(map);

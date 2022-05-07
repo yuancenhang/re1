@@ -16,19 +16,46 @@
     </insert>
 
     <select id="getActivityList" parameterType="map" resultType="Activity">
-        select * from t_activity
+        select
+        a.id,a.name,u.name as owner,a.startDate,a.endDate
+        from t_activity a
+        join t_user u
+        on a.owner=u.id
         <where>
             <if test="owner!=null and owner!=''">
-                and owner = ${owner}
+                and u.name like '%' #{owner} '%'
             </if>
             <if test="name!=null and name!=''">
-                and name = ${name}
+                and a.name like '%' #{name} '%'
             </if>
             <if test="startDate!=null and startDate!=''">
-                and startDate = ${startDate}
+                and a.startDate &gt; #{startDate}
             </if>
             <if test="endDate!=null and endDate!=''">
-                and endDate = ${endDate}
+                and a.endDate &lt; #{endDate}
+            </if>
+        </where>
+        order by a.createTime desc
+        limit #{pageNo},#{pageSize}
+    </select>
+    <select id="selectTotal" parameterType="map" resultType="int">
+        select
+        count(*)
+        from t_activity a
+        join t_user u
+        on a.owner=u.id
+        <where>
+            <if test="owner!=null and owner!=''">
+                and u.name like '%' #{owner} '%'
+            </if>
+            <if test="name!=null and name!=''">
+                and a.name like '%' #{name} '%'
+            </if>
+            <if test="startDate!=null and startDate!=''">
+                and a.startDate &gt; #{startDate}
+            </if>
+            <if test="endDate!=null and endDate!=''">
+                and a.endDate &lt; #{endDate}
             </if>
         </where>
     </select>

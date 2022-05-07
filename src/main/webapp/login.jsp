@@ -45,7 +45,7 @@
             })
 
             //按回车键登陆
-            pass.keydown=function (event) {
+            document.onkeydown=function (event) {
                 if(event.keyCode === 13){
                     login();
                 }
@@ -60,6 +60,7 @@
                 e.html("账号密码不能为空");
                 return false;
             }
+            e.html("登陆中，请稍等！");
             $.ajax({
                 url : "User/login.sv",
                 data : {

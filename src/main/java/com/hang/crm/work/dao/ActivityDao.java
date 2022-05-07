@@ -4,10 +4,13 @@ import com.hang.crm.work.domain.Activity;
 import com.hang.crm.work.vo.PageVo;
 
 import java.util.List;
+import java.util.Map;
 
 public interface ActivityDao {
 
     Integer activitySave(Activity activity);
 
-    List<Activity> getActivityList();
+    List<Activity> getActivityList(Map map);
+
+    Integer selectTotal(Map map);
 }
