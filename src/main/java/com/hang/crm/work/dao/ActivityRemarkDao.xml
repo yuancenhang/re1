@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.hang.crm.work.dao.ActivityRemarkDao">
+    <!--查满足条件的备注条数-->
+    <select id="getCount" resultType="int">
+        select count(*) from t_activityremark where activityId in
+        <foreach collection="array" item="rid" open="(" close=")" separator=",">
+            #{rid}
+        </foreach>
+    </select>
+    <!--删除满足条件的备注-->
+    <delete id="delete">
+        delete from t_activityremark where activityId in
+        <foreach collection="array" item="rid" open="(" close=")" separator=",">
+            #{rid}
+        </foreach>
+    </delete>
+</mapper>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

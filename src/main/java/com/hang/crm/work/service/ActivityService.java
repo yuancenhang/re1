@@ -10,4 +10,10 @@ public interface ActivityService {
     Integer activitySave(Activity activity);
 
     PageVo getActivityList(Map<String, Object> map);
+
+    boolean deleteActivity(String[] ids);
+
+    Map<String, Object> editActivity(String id);
+
+    boolean editSave(Map<String, Object> map);
 }

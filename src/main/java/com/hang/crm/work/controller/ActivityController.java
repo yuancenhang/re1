@@ -13,6 +13,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
@@ -29,23 +30,79 @@ public class ActivityController extends HttpServlet {
             avtivitySave(request,response);
         }else if ("/work/activity/pageList.sv".equals(path)){
             getActivityList(request,response);
+        }else if ("/work/activity/delete.sv".equals(path)){
+            deleteActivity(request,response);
+        }else if ("/work/activity/edit.sv".equals(path)){
+            editActivity(request,response);
+        }else if ("/work/activity/editSave.sv".equals(path)){
+            editSave(request,response);
         }
     }
 
-    private void getActivityList(HttpServletRequest request, HttpServletResponse response) {
-        System.out.println("进入到activity");
+    /**
+     * 市场活动修改后保存的方法，update
+     * @param request
+     * @param response
+     */
+    private void editSave(HttpServletRequest request, HttpServletResponse response) {
+        String activityId = request.getParameter("activityId");
+        String owner = request.getParameter("owner");
+        String activityName = request.getParameter("activityName");
+        String startDate = request.getParameter("startDate");
+        String endDate = request.getParameter("endDate");
+        String cost = request.getParameter("cost");
+        String description = request.getParameter("description");
+        HttpSession session = request.getSession();
+        User user = (User) session.getAttribute("user");
+        String editBy = user.getId();
+        Map<String,Object> map = new HashMap<>();
+        map.put("activityId",activityId);
+        map.put("owner",owner);
+        map.put("activityName",activityName);
+        map.put("startDate",startDate);
+        map.put("endDate",endDate);
+        map.put("cost",cost);
+        map.put("description",description);
+        map.put("editBy",editBy);
+        String editTime = UtilOne.getTime();
+        map.put("editTime",editTime);
 
+        ActivityService service = (ActivityService) UtilOne.getProxyOfCommit(new ActivityServiceImpl());
+        boolean ok = service.editSave(map);
+        UtilOne.printBoolean(response,ok);
+    }
+
+    /**
+     * 修改市场活动的方法
+     * @param request
+     * @param response
+     */
+    private void editActivity(HttpServletRequest request, HttpServletResponse response) {
+        String activityId = request.getParameter("id");
+        ActivityService service = (ActivityService) UtilOne.getProxyOfCommit(new ActivityServiceImpl());
+        Map<String,Object> map = service.editActivity(activityId);
+        UtilOne.printJson(response,map);
+    }
+
+    /**
+     * 删除市场活动的方法
+     * @param request 请求对象
+     * @param response 响应对象
+     */
+    private void deleteActivity(HttpServletRequest request, HttpServletResponse response) {
+        String[] ids = request.getParameterValues("id");
+        ActivityService service = (ActivityService) UtilOne.getProxyOfCommit(new ActivityServiceImpl());
+        boolean ok = service.deleteActivity(ids);
+        UtilOne.printBoolean(response,ok);
+    }
+
+    private void getActivityList(HttpServletRequest request, HttpServletResponse response) {
         String pageNo = request.getParameter("pageNo");
-        System.out.println(pageNo);
         int no = Integer.parseInt(pageNo);
-        System.out.println(no);
 
         String pageSize = request.getParameter("pageSize");
-        System.out.println("pageSize=="+pageSize);
         int size = Integer.parseInt(pageSize);
-        System.out.println("size=="+size);
         no = (no-1)*size;
-        System.out.println("no=="+no);
 
         String name = request.getParameter("name");
         String owner = request.getParameter("owner");
@@ -56,13 +113,9 @@ public class ActivityController extends HttpServlet {
         map.put("pageNo",no);
         map.put("pageSize",size);
         map.put("name",name);
-        System.out.println("name=="+name);
         map.put("owner",owner);
-        System.out.println("owner=="+owner);
         map.put("startDate",startDate);
-        System.out.println("startDate=="+startDate);
         map.put("endDate",endDate);
-        System.out.println("endDate=="+endDate);
 
         ActivityService as = (ActivityService) UtilOne.getProxyOfCommit(new ActivityServiceImpl());
         PageVo pageVo = as.getActivityList(map);
@@ -84,7 +137,7 @@ public class ActivityController extends HttpServlet {
         String cost =request.getParameter("cost");
         String description =request.getParameter("description");
         String createTime = UtilOne.getTime();
-        String createBy = ((User)(request.getSession().getAttribute("user"))).getName();
+        String createBy = ((User)(request.getSession().getAttribute("user"))).getId();
         Activity activity = new Activity();
         activity.setId(id);
         activity.setOwner(owner);

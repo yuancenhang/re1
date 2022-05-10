@@ -8,7 +8,7 @@ public class ActivityRemark {
     private String editTime;
     private String editBy;
     private String editFlag;  //是否被修改过的标记
-    private String activityId;
+    private String activityId; //这条备注是属于哪个市场活动的
 
    public ActivityRemark() {
    }

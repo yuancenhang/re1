@@ -13,4 +13,10 @@ public interface ActivityDao {
     List<Activity> getActivityList(Map map);
 
     Integer selectTotal(Map map);
+
+    int delete(String[] ids);
+
+    Activity selectById(String id);
+
+    int editSave(Map<String, Object> map);
 }
