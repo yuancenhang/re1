@@ -2,7 +2,7 @@ package com.hang.crm.work.domain;
 
 public class Activity {
     private String id;  //主键
-    private String owner;  //所有者，填的其实不是名字，而是user表的id
+    private String owner;  //所有者
     private String name;  //市场活动名称
     private String startDate;  //开始日期
     private String endDate;  //结束日期

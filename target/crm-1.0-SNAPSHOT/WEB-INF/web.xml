@@ -48,6 +48,11 @@
         <url-pattern>/work/activity/getUserList.sv</url-pattern>
         <url-pattern>/work/activity/save.sv</url-pattern>
         <url-pattern>/work/activity/pageList.sv</url-pattern>
+        <url-pattern>/work/activity/delete.sv</url-pattern>
+        <url-pattern>/work/activity/edit.sv</url-pattern>
+        <url-pattern>/work/activity/editSave.sv</url-pattern>
+        <url-pattern>/work/activity/detail.sv</url-pattern>
+        <url-pattern>/work/activity/loadRemark.sv</url-pattern>
     </servlet-mapping>
 
 </web-app>

@@ -66,7 +66,19 @@
     </delete>
 
     <select id="selectById" resultType="Activity">
-        select * from
+        select
+        a.id,
+        u.name as owner ,
+        a.name,
+        a.startDate,
+        a.endDate,
+        a.cost,
+        a.description,
+        a.createTime,
+        a.createBy,
+        a.editTime,
+        a.editBy
+        from
         t_activity a
         join t_user u
         on a.owner=u.id

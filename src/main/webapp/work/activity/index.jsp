@@ -84,7 +84,7 @@
 						//清空隐藏域和查询框，刷新展示列表
 						$(".hidden-search").val();
 						$(".search-in").val();
-						loadActivityList(1,3);
+						loadActivityList(1,$("#pageDiv").bs_pagination("getOption","currentPage"));
 						//关闭模态窗口
 						$("#createActivityModal").modal("hide");
 					}else {
@@ -102,7 +102,7 @@
 			$("#hidden-startTime").val($.trim($("#search-startTime").val()));
 			$("#hidden-endTime").val($.trim($("#search-endTime").val()));
 			//刷新展示列表
-			loadActivityList(1,3);
+			loadActivityList(1,$("#pageDiv").bs_pagination("getOption","currentPage"));
 		})
 
 		//全选和取消全选的功能
@@ -137,7 +137,7 @@
 					data:text,
 					success:function (data) {
 						if (data.ok){
-							loadActivityList(1,3);
+							loadActivityList(1,$("#pageDiv").bs_pagination("getOption","currentPage"));
 						}else {
 							alert("删除活动失败！！！");
 						}
@@ -181,14 +181,13 @@
 			success : function (data) {
 				if (data.ok){
 					alert("修改成功");
-					loadActivityList(1,3);
+					loadActivityList($("#pageDiv").bs_pagination("getOption","rowsPerPage"),$("#pageDiv").bs_pagination("getOption","currentPage"));
 					$("#editActivityModal").modal("hide");
 				}else {
 					alert("修改失败");
 				}
 			}
 		})
-		$("#editActivityModal").modal("show");
 	}
 	//封装的活动修改方法,id是活动的id
 	function edit(id){
@@ -246,7 +245,7 @@
 				$.each(data.list,function (i,n) {
 					html += '<tr class="active">';
 					html += '<td><input type="checkbox" name="box" value="'+n.id+'"/></td>';
-					html += '<td><a style="text-decoration: none; cursor: pointer;" onclick="window.location.href=\'work/activity/detail.html\';">'+n.name+'</a></td>';
+					html += '<td><a style="text-decoration: none; cursor: pointer;" onclick="window.location.href=\'work/activity/detail.sv?id='+n.id+'\';">'+n.name+'</a></td>';
 					html += '<td>'+n.owner+'</td>';
 					html += '<td>'+n.startDate+'</td>';
 					html += '<td>'+n.endDate+'</td>';

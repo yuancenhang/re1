@@ -5,7 +5,10 @@ import com.hang.crm.settings.service.UserService;
 import com.hang.crm.settings.service.impl.UserServiceImpl;
 import com.hang.crm.utils.UtilOne;
 import com.hang.crm.work.domain.Activity;
+import com.hang.crm.work.domain.ActivityRemark;
+import com.hang.crm.work.service.ActivityRemarkService;
 import com.hang.crm.work.service.ActivityService;
+import com.hang.crm.work.service.impl.ActivityRemarkServiceImpl;
 import com.hang.crm.work.service.impl.ActivityServiceImpl;
 import com.hang.crm.work.vo.PageVo;
 
@@ -36,13 +39,45 @@ public class ActivityController extends HttpServlet {
             editActivity(request,response);
         }else if ("/work/activity/editSave.sv".equals(path)){
             editSave(request,response);
+        }else if ("/work/activity/detail.sv".equals(path)){
+            loadDetail(request,response);
+        }else if ("/work/activity/loadRemark.sv".equals(path)){
+            System.out.println("进入1");
+            loadRemark(request,response);
         }
     }
 
     /**
+     * 加载备注列表的方法
+     * @param request 请求对象
+     * @param response 响应对象
+     */
+    private void loadRemark(HttpServletRequest request, HttpServletResponse response) {
+        System.out.println("进入");
+        String activityId = request.getParameter("id");
+        ActivityRemarkService service = (ActivityRemarkService) UtilOne.getProxyOfCommit(new ActivityRemarkServiceImpl());
+        List<ActivityRemark> list = service.loadRemark(activityId);
+        System.out.println(list);
+        UtilOne.printJson(response,list);
+    }
+
+    /**
+     * 加载活动详细信息的jsp页面的方法，获取数据，然后转发
+     * @param request 请求对象
+     * @param response 响应对象
+     */
+    private void loadDetail(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        String activityId = request.getParameter("id");
+        ActivityService service = (ActivityService) UtilOne.getProxyOfCommit(new ActivityServiceImpl());
+        Activity activity = service.loadDetail(activityId);
+        request.setAttribute("activity",activity);
+        request.getRequestDispatcher("/work/activity/detail.jsp").forward(request,response);
+    }
+
+    /**
      * 市场活动修改后保存的方法，update
-     * @param request
-     * @param response
+     * @param request 请求对象
+     * @param response 响应对象
      */
     private void editSave(HttpServletRequest request, HttpServletResponse response) {
         String activityId = request.getParameter("activityId");
@@ -74,8 +109,8 @@ public class ActivityController extends HttpServlet {
 
     /**
      * 修改市场活动的方法
-     * @param request
-     * @param response
+     * @param request 请求对象
+     * @param response 响应对象
      */
     private void editActivity(HttpServletRequest request, HttpServletResponse response) {
         String activityId = request.getParameter("id");

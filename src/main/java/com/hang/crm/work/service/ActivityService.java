@@ -16,4 +16,6 @@ public interface ActivityService {
     Map<String, Object> editActivity(String id);
 
     boolean editSave(Map<String, Object> map);
+
+    Activity loadDetail(String activityId);
 }

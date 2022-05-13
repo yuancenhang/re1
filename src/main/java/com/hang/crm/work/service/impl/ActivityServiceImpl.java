@@ -45,6 +45,11 @@ public class ActivityServiceImpl implements ActivityService {
         return count == 1;
     }
 
+    @Override
+    public Activity loadDetail(String activityId) {
+        return dao.selectById(activityId);
+    }
+
     @Override //删除活动，设计t_activity表，t_activityRemark备注表
     public boolean deleteActivity(String[] ids) {
         boolean flag = true;

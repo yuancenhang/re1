@@ -51,6 +51,8 @@
         <url-pattern>/work/activity/delete.sv</url-pattern>
         <url-pattern>/work/activity/edit.sv</url-pattern>
         <url-pattern>/work/activity/editSave.sv</url-pattern>
+        <url-pattern>/work/activity/detail.sv</url-pattern>
+        <url-pattern>/work/activity/loadRemark.sv</url-pattern>
     </servlet-mapping>
 
 </web-app>

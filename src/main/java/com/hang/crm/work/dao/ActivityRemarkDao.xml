@@ -18,6 +18,10 @@
             #{rid}
         </foreach>
     </delete>
+    <!--根据活动id查备注-->
+    <select id="selectByActivityId" resultType="ActivityRemark">
+        select * from t_activityremark where activityId=#{id}
+    </select>
 </mapper>
 
 
