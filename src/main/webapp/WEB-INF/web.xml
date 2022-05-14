@@ -53,6 +53,10 @@
         <url-pattern>/work/activity/editSave.sv</url-pattern>
         <url-pattern>/work/activity/detail.sv</url-pattern>
         <url-pattern>/work/activity/loadRemark.sv</url-pattern>
+        <url-pattern>/work/activity/getRemark.sv</url-pattern>
+        <url-pattern>/work/activity/updateRemark.sv</url-pattern>
+        <url-pattern>/work/activity/saveRemark.sv</url-pattern>
+        <url-pattern>/work/activity/deleteRemark.sv</url-pattern>
     </servlet-mapping>
 
 </web-app>

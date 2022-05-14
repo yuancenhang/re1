@@ -1,0 +1,9 @@
+$.ajax({
+			url:"work/activity/getRemark.sv",
+			type:"get",
+			dataType:"json",
+			data:"",
+			success:function (data){
+
+			}
+})

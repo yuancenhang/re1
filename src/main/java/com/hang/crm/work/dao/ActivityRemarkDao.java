@@ -11,4 +11,12 @@ public interface ActivityRemarkDao {
     int delete(String[] ids);
 
     List<ActivityRemark> selectByActivityId(String activityId);
+
+    ActivityRemark getRemarkById(String rid);
+
+    int updateById(ActivityRemark remark);
+
+    int insert(ActivityRemark remark);
+
+    int deleteById(String rid);
 }

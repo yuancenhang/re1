@@ -11,6 +11,7 @@
             #{rid}
         </foreach>
     </select>
+
     <!--删除满足条件的备注-->
     <delete id="delete">
         delete from t_activityremark where activityId in
@@ -18,10 +19,50 @@
             #{rid}
         </foreach>
     </delete>
-    <!--根据活动id查备注-->
+
+    <!--根据活动id查备注,返回list-->
     <select id="selectByActivityId" resultType="ActivityRemark">
         select * from t_activityremark where activityId=#{id}
     </select>
+
+    <!--根据备注id查备注，返回单个remark-->
+    <select id="getRemarkById" resultType="ActivityRemark">
+        select * from t_activityremark where id=#{id}
+    </select>
+
+    <!--根据备注id更新备注-->
+    <update id="updateById">
+        update t_activityremark set
+        noteContent = #{noteContent},
+        editTime = #{editTime},
+        editBy = #{editBy},
+        editFlag = #{editFlag}
+        where id = #{id}
+    </update>
+
+    <!--新增备注-->
+    <insert id="insert">
+        insert into t_activityremark (
+            id,
+            noteContent,
+            createTime,
+            createBy,
+            editFlag,
+            activityId
+        ) values (
+            #{id},
+            #{noteContent},
+            #{createTime},
+            #{createBy},
+            #{editFlag},
+            #{activityId}
+        )
+    </insert>
+
+    <!--删除备注-->
+    <delete id="deleteById">
+        delete from t_activityremark where id = #{id}
+    </delete>
 </mapper>
 
 

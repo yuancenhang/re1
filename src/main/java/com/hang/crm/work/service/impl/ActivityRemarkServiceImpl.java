@@ -14,4 +14,27 @@ public class ActivityRemarkServiceImpl implements ActivityRemarkService {
     public List<ActivityRemark> loadRemark(String activityId) {
         return remarkDao.selectByActivityId(activityId);
     }
+
+    @Override
+    public ActivityRemark getRemark(String rid) {
+        return remarkDao.getRemarkById(rid);
+    }
+
+    @Override
+    public boolean updateRemark(ActivityRemark remark) {
+        int count = remarkDao.updateById(remark);
+        return count == 1 ;
+    }
+
+    @Override
+    public boolean saveRemark(ActivityRemark remark) {
+        int count = remarkDao.insert(remark);
+        return count == 1 ;
+    }
+
+    @Override
+    public boolean deleteRemark(String rid) {
+        int count = remarkDao.deleteById(rid);
+        return count == 1 ;
+    }
 }

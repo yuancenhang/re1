@@ -20,43 +20,69 @@
 		//刷新备注列表
 		loadRemark("${activity.id}");
 
+		//新增备注的文本域获得焦点
 		$("#remark").focus(function(){
-			if(cancelAndSaveBtnDefault){
-				//设置remarkDiv的高度为130px
-				$("#remarkDiv").css("height","130px");
-				//显示
-				$("#cancelAndSaveBtn").show("2000");
-				cancelAndSaveBtnDefault = false;
-			}
+			show();
 		});
-		
-		$("#cancelBtn").click(function(){
-			//显示
-			$("#cancelAndSaveBtn").hide();
-			//设置remarkDiv的高度为130px
-			$("#remarkDiv").css("height","90px");
-			cancelAndSaveBtnDefault = true;
-		});
-		
-		$(".remarkDiv").mouseover(function(){
-			$(this).children("div").children("div").show();
-		});
-		
-		$(".remarkDiv").mouseout(function(){
-			$(this).children("div").children("div").hide();
-		});
-		
-		$(".myHref").mouseover(function(){
-			$(this).children("span").css("color","red");
-		});
-		
-		$(".myHref").mouseout(function(){
-			$(this).children("span").css("color","#E6E6E6");
-		});
-	});
 
+		//取消按钮被单击
+		$("#cancelBtn").click(function(){
+			hide();
+		});
+
+		//鼠标进入动态创建的div，显示
+		$("#remarkFather").on("mouseover",".remarkDiv",function () {
+			$(this).children("div").children("div").show();
+		})
+		//鼠标移出动态创建的div,隐藏
+		$("#remarkFather").on("mouseout",".remarkDiv",function () {
+			$(this).children("div").children("div").hide();
+		})
+
+		//鼠标移出动态创建的div，变红
+		$("#remarkFather").on("mouseover",".tb",function () {
+			$(".tb").css("color","red");
+		})
+
+		//鼠标进入动态创建的div，变灰
+		$("#remarkFather").on("mouseout",".tb",function () {
+			$(".tb").css("color","#E6E6E6");
+		})
+
+		//更新备注的按钮被单击
+		$("#updateRemarkBtn").on("click",function () {
+			updateRemark();
+		})
+
+		//更新备注的按钮被单击
+		$("#saveBtn").on("click",function () {
+			if (""==$("#remark").val()){
+				alert("请输入备注再保存！")
+			}else {
+				saveRemark();
+			}
+		})
+	});
+	function show(){
+		if(cancelAndSaveBtnDefault){
+			//放大文本域
+			$("#remarkDiv").css("height","130px");
+			//显示两个按钮
+			$("#cancelAndSaveBtn").show("2000");
+			cancelAndSaveBtnDefault = false;
+		}
+	}
+	function hide(){
+		$("#remark").val(""); //清空文本域
+		//隐藏两个按钮
+		$("#cancelAndSaveBtn").hide();
+		//缩小文本域
+		$("#remarkDiv").css("height","90px");
+		cancelAndSaveBtnDefault = true; //隐藏为true
+	}
 	//封装的加载备注列表的方法
 	function loadRemark(aid){
+		$(".remarkDiv").remove();
 		$.ajax({
 			url:"work/activity/loadRemark.sv",
 			type:"get",
@@ -71,9 +97,10 @@
 					html += '<h5>'+n.noteContent+'</h5>';
 					html += '<font color="gray">市场活动</font> <font color="gray">-</font> <b>${activity.name}</b> <small style="color: gray;"> '+(n.editFlag==0?n.createTime:n.editTime)+ '由' + (n.editFlag==0?n.createBy:n.editBy)+'</small>';
 					html += '<div style="position: relative; left: 500px; top: -30px; height: 30px; width: 100px; display: none;">';
-					html += '<a class="myHref" href="javascript:void(0);"><span class="glyphicon glyphicon-edit" style="font-size: 20px; color: #E6E6E6;"></span></a>';
-					html += 'nbsp;&nbsp;&nbsp;&nbsp;';
-					html += '<a class="myHref" href="javascript:void(0);"><span class="glyphicon glyphicon-remove" style="font-size: 20px; color: #E6E6E6;"></span></a>';
+					//因为在外面定义点击事件需要传id，为了方便直接在这里调用函数，在动态生成的组件里调用函数，如果需要传参，需要用引号把参数包起来
+					html += '<a class="myHref" href="javascript:void(0);" onclick="editRemark(\''+n.id+'\')"><span class="tb glyphicon glyphicon-edit" style="font-size: 20px; color: #E6E6E6;"></span></a>';
+					html += '&nbsp;&nbsp;&nbsp;&nbsp;';
+					html += '<a class="myHref" href="javascript:void(0);" onclick="deleteRemark(\''+n.id+'\')"><span class="tb glyphicon glyphicon-remove" style="font-size: 20px; color: #E6E6E6;"></span></a>';
 					html += '</div>';
 					html += '</div>';
 					html += '</div>';
@@ -81,6 +108,82 @@
 				$("#remarkDiv").before(html);
 			}
 		})
+	}
+	//封装的编辑备注被点击的函数,获取备注，写进modal的div
+	function editRemark(remarkId){
+		$.ajax({
+			url:"work/activity/getRemark.sv",
+			type:"get",
+			dataType:"json",
+			data:"id="+remarkId,
+			success:function (data){
+				$("#remarkId").val(data.id); //ID放在隐藏域
+				$("#noteContent").val(data.noteContent); //内容写进文本域
+				$("#editRemarkModal").modal("show");
+			}
+		})
+	}
+	//封装的更新备注的方法
+	function updateRemark(){
+		$.ajax({
+			url:"work/activity/updateRemark.sv",
+			type:"post",
+			dataType:"json",
+			data:{
+				"id":$("#remarkId").val(),
+				"noteContent":$("#noteContent").val()
+			},
+			success:function (data){
+				if (data.ok){
+					alert("修改成功");
+					loadRemark("${activity.id}");
+					$("#editRemarkModal").modal("hide");
+				}else {
+					alert("修改失败");
+				}
+			}
+		})
+	}
+	//封装的新建备注的方法
+	function saveRemark(){
+		$.ajax({
+			url:"work/activity/saveRemark.sv",
+			type:"post",
+			dataType:"json",
+			data:{
+				"activityId":"${activity.id}",
+				"noteContent":$("#remark").val()
+			},
+			success:function (data){
+				if (data.ok){
+					alert("新增备注成功!");
+					hide();
+					loadRemark("${activity.id}");
+					$("#editRemarkModal").modal("hide");
+				}else {
+					alert("失败!");
+				}
+			}
+		})
+	}
+	//封装的删除备注的函数
+	function deleteRemark(remarkId){
+		if (confirm("确定要删除这条备注吗？？？")){
+			$.ajax({
+				url:"work/activity/deleteRemark.sv",
+				type:"get",
+				dataType:"json",
+				data:"id="+remarkId,
+				success:function (data){
+					if (data.ok){
+						alert("删除备注成功！");
+						loadRemark("${activity.id}")
+					}else {
+						alert("删除备注失败！！！");
+					}
+				}
+			})
+		}
 	}
 </script>
 
@@ -128,7 +231,7 @@
 			<h3>市场活动-${activity.name} <small>${activity.startDate}  ~ ${activity.endDate} </small></h3>
 		</div>
 		<div style="position: relative; height: 50px; width: 250px;  top: -72px; left: 700px;">
-			<button type="button" class="btn btn-default" data-toggle="modal" data-target="#editActivityModal"><span class="glyphicon glyphicon-edit"></span> 编辑</button>
+			<button type="button" class="btn btn-default"><span class="glyphicon glyphicon-edit"></span> 编辑</button>
 			<button type="button" class="btn btn-danger"><span class="glyphicon glyphicon-minus"></span> 删除</button>
 		</div>
 	</div>
@@ -179,7 +282,7 @@
 	</div>
 	
 	<!-- 备注 -->
-	<div style="position: relative; top: 30px; left: 40px;">
+	<div style="position: relative; top: 30px; left: 40px;" id="remarkFather">
 		<div class="page-header">
 			<h4>备注</h4>
 		</div>
@@ -203,7 +306,7 @@
 				<textarea id="remark" class="form-control" style="width: 850px; resize : none;" rows="2"  placeholder="添加备注..."></textarea>
 				<p id="cancelAndSaveBtn" style="position: relative;left: 737px; top: 10px; display: none;">
 					<button id="cancelBtn" type="button" class="btn btn-default">取消</button>
-					<button type="button" class="btn btn-primary">保存</button>
+					<button type="button" class="btn btn-primary" id="saveBtn">保存</button>
 				</p>
 			</form>
 		</div>

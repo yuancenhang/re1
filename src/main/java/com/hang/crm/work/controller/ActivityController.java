@@ -42,9 +42,85 @@ public class ActivityController extends HttpServlet {
         }else if ("/work/activity/detail.sv".equals(path)){
             loadDetail(request,response);
         }else if ("/work/activity/loadRemark.sv".equals(path)){
-            System.out.println("进入1");
             loadRemark(request,response);
+        }else if ("/work/activity/getRemark.sv".equals(path)){
+            getRemark(request,response);
+        }else if ("/work/activity/updateRemark.sv".equals(path)){
+            updateRemark(request,response);
+        }else if ("/work/activity/saveRemark.sv".equals(path)){
+            saveRemark(request,response);
+        }else if ("/work/activity/deleteRemark.sv".equals(path)){
+            deleteRemark(request,response);
         }
+    }
+    /**
+     * 删除备注的方法，delete
+     * @param request 请求对象
+     * @param response 响应对象
+     */
+    private void deleteRemark(HttpServletRequest request, HttpServletResponse response) {
+        String rid = request.getParameter("id");
+        ActivityRemarkService service = (ActivityRemarkService) UtilOne.getProxyOfCommit(new ActivityRemarkServiceImpl());
+        boolean ok = service.deleteRemark(rid);
+        UtilOne.printBoolean(response,ok);
+    }
+    /**
+     * 保存新建备注的方法，insert
+     * @param request 请求对象
+     * @param response 响应对象
+     */
+    private void saveRemark(HttpServletRequest request, HttpServletResponse response) {
+        String id = UtilOne.getUUID();
+        String noteContent = request.getParameter("noteContent");
+        String createTime =  UtilOne.getTime();
+        User user = (User) request.getSession().getAttribute("user");
+        String createBy = user.getName();
+        String editFlag = "0";
+        String activityId = request.getParameter("activityId");
+        ActivityRemark remark = new ActivityRemark();
+        remark.setId(id);
+        remark.setNoteContent(noteContent);
+        remark.setCreateTime(createTime);
+        remark.setCreateBy(createBy);
+        remark.setEditFlag(editFlag);
+        remark.setActivityId(activityId);
+        ActivityRemarkService service = (ActivityRemarkService) UtilOne.getProxyOfCommit(new ActivityRemarkServiceImpl());
+        boolean ok = service.saveRemark(remark);
+        UtilOne.printBoolean(response,ok);
+    }
+
+    /**
+     * 更新备注的方法，update
+     * @param request 请求对象
+     * @param response 响应对象
+     */
+    private void updateRemark(HttpServletRequest request, HttpServletResponse response) {
+        String rid = request.getParameter("id");
+        String noteContent = request.getParameter("noteContent");
+        String editTime = UtilOne.getTime();
+        User user = (User) request.getSession().getAttribute("user");
+        String editBy = user.getName();
+        String editFlag = "1";
+        ActivityRemark remark = new ActivityRemark();
+        remark.setId(rid);
+        remark.setNoteContent(noteContent);
+        remark.setEditTime(editTime);
+        remark.setEditBy(editBy);
+        remark.setEditFlag(editFlag);
+        ActivityRemarkService service = (ActivityRemarkService) UtilOne.getProxyOfCommit(new ActivityRemarkServiceImpl());
+        boolean ok = service.updateRemark(remark);
+        UtilOne.printBoolean(response,ok);
+    }
+    /**
+     * 根据ID查备注的方法
+     * @param request 请求对象
+     * @param response 响应对象
+     */
+    private void getRemark(HttpServletRequest request, HttpServletResponse response) {
+        String rid = request.getParameter("id");
+        ActivityRemarkService service = (ActivityRemarkService) UtilOne.getProxyOfCommit(new ActivityRemarkServiceImpl());
+        ActivityRemark remark = service.getRemark(rid);
+        UtilOne.printJson(response,remark);
     }
 
     /**
@@ -53,11 +129,9 @@ public class ActivityController extends HttpServlet {
      * @param response 响应对象
      */
     private void loadRemark(HttpServletRequest request, HttpServletResponse response) {
-        System.out.println("进入");
         String activityId = request.getParameter("id");
         ActivityRemarkService service = (ActivityRemarkService) UtilOne.getProxyOfCommit(new ActivityRemarkServiceImpl());
         List<ActivityRemark> list = service.loadRemark(activityId);
-        System.out.println(list);
         UtilOne.printJson(response,list);
     }
 

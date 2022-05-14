@@ -84,7 +84,7 @@
 						//清空隐藏域和查询框，刷新展示列表
 						$(".hidden-search").val();
 						$(".search-in").val();
-						loadActivityList(1,$("#pageDiv").bs_pagination("getOption","currentPage"));
+						loadActivityList(1,$("#pageDiv").bs_pagination("getOption","rowsPerPage"));
 						//关闭模态窗口
 						$("#createActivityModal").modal("hide");
 					}else {
@@ -102,7 +102,7 @@
 			$("#hidden-startTime").val($.trim($("#search-startTime").val()));
 			$("#hidden-endTime").val($.trim($("#search-endTime").val()));
 			//刷新展示列表
-			loadActivityList(1,$("#pageDiv").bs_pagination("getOption","currentPage"));
+			loadActivityList(1,$("#pageDiv").bs_pagination("getOption","rowsPerPage"));
 		})
 
 		//全选和取消全选的功能
@@ -137,7 +137,7 @@
 					data:text,
 					success:function (data) {
 						if (data.ok){
-							loadActivityList(1,$("#pageDiv").bs_pagination("getOption","currentPage"));
+							loadActivityList(1,$("#pageDiv").bs_pagination("getOption","rowsPerPage"));
 						}else {
 							alert("删除活动失败！！！");
 						}
@@ -181,7 +181,7 @@
 			success : function (data) {
 				if (data.ok){
 					alert("修改成功");
-					loadActivityList($("#pageDiv").bs_pagination("getOption","rowsPerPage"),$("#pageDiv").bs_pagination("getOption","currentPage"));
+					loadActivityList($("#pageDiv").bs_pagination("getOption","currentPage"),$("#pageDiv").bs_pagination("getOption","rowsPerPage"));
 					$("#editActivityModal").modal("hide");
 				}else {
 					alert("修改失败");
@@ -271,7 +271,6 @@
 						loadActivityList(data.currentPage,data.rowsPerPage);
 					}
 				})
-
 			}
 		})
 	}
