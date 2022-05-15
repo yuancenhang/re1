@@ -1,5 +1,10 @@
 package com.hang.crm.listener;
 
+import com.hang.crm.settings.service.DicService;
+import com.hang.crm.settings.service.impl.DicServiceImpl;
+import com.hang.crm.utils.UtilOne;
+
+import javax.servlet.ServletContext;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 
@@ -12,6 +17,8 @@ public class ApplicationListener implements ServletContextListener {
      */
     @Override
     public void contextInitialized(ServletContextEvent sce) {
-
+        DicService service = (DicService) UtilOne.getProxyOfCommit(new DicServiceImpl());
+        ServletContext application = sce.getServletContext();
+        service.write(application);
     }
 }

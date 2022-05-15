@@ -30,7 +30,7 @@ public class ActivityController extends HttpServlet {
         if ("/work/activity/getUserList.sv".equals(path)){
             getUserList(request,response);
         }else if ("/work/activity/save.sv".equals(path)){
-            avtivitySave(request,response);
+            activitySave(request,response);
         }else if ("/work/activity/pageList.sv".equals(path)){
             getActivityList(request,response);
         }else if ("/work/activity/delete.sv".equals(path)){
@@ -236,7 +236,7 @@ public class ActivityController extends HttpServlet {
      * @param request 请求对象
      * @param response 响应对象
      */
-    private void avtivitySave(HttpServletRequest request, HttpServletResponse response) {
+    private void activitySave(HttpServletRequest request, HttpServletResponse response) {
         //取数据塞进activity对象
         String id = UtilOne.getUUID();
         String owner =request.getParameter("owner");
