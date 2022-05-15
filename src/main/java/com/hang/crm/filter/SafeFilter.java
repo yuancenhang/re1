@@ -19,7 +19,7 @@ public class SafeFilter implements Filter {
         HttpServletResponse response = (HttpServletResponse) servletResponse;
         String path = request.getServletPath();
         //如果访问的是登陆相关，放行
-        if ("/User/login.sv".equals(path) || "/login.jsp".equals(path) ||"/index.html".equals(path)) {
+        if ("/User/login.sv".equals(path) || "/login.jsp".equals(path) ||"/index.jsp".equals(path)) {
             filterChain.doFilter(servletRequest,servletResponse);
             return;
         }
