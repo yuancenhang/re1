@@ -50,6 +50,11 @@ public class ActivityServiceImpl implements ActivityService {
         return dao.selectById(activityId);
     }
 
+    @Override
+    public List<Activity> getAllActivityList() {
+        return dao.getAllActivityList();
+    }
+
     @Override //删除活动，设计t_activity表，t_activityRemark备注表
     public boolean deleteActivity(String[] ids) {
         boolean flag = true;

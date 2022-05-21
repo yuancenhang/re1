@@ -97,6 +97,18 @@
             editBy = #{editBy}
         where id = #{activityId}
     </update>
+
+    <select id="getAllActivityList" resultType="Activity">
+        select
+            a.id,
+            u.name as owner,
+            a.name,
+            a.startDate,
+            a.endDate
+        from t_activity a
+        join t_user u
+        on a.owner=u.id
+    </select>
 </mapper>
 
 

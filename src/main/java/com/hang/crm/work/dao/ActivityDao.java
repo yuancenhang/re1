@@ -19,4 +19,6 @@ public interface ActivityDao {
     Activity selectById(String id);
 
     int editSave(Map<String, Object> map);
+
+    List<Activity> getAllActivityList();
 }

@@ -5,7 +5,17 @@
 
 <mapper namespace="com.hang.crm.work.dao.ClueActivityRelationDao">
 	
-	
+	<insert id="saveguanlian" parameterType="map" >
+        insert into tbl_clue_activity_relation(
+            id,
+            clueId,
+            activityId
+        )values (
+            #{id},
+            #{clueId},
+            #{activityId}
+        )
+    </insert>
   	
 </mapper>
 

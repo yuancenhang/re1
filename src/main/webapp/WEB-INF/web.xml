@@ -71,6 +71,11 @@
     </servlet>
     <servlet-mapping>
         <servlet-name>ClueController</servlet-name>
-        <url-pattern>/work/clue/xxx.sv</url-pattern>
+        <url-pattern>/work/clue/getUserList.sv</url-pattern>
+        <url-pattern>/work/clue/saveClue.sv</url-pattern>
+        <url-pattern>/work/clue/getClueList.sv</url-pattern>
+        <url-pattern>/work/clue/selectById.sv</url-pattern>
+        <url-pattern>/work/clue/getActivityList.sv</url-pattern>
+        <url-pattern>/work/clue/saveguanlian.sv</url-pattern>
     </servlet-mapping>
 </web-app>

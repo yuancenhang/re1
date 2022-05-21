@@ -23,6 +23,11 @@
         <url-pattern>*.jsp</url-pattern>
     </filter-mapping>
 
+    <!--监听器注册-->
+    <listener>
+        <listener-class>com.hang.crm.listener.ApplicationListener</listener-class>
+    </listener>
+
     <!--首页-->
     <welcome-file-list>
         <welcome-file>index.html</welcome-file>
@@ -59,4 +64,18 @@
         <url-pattern>/work/activity/deleteRemark.sv</url-pattern>
     </servlet-mapping>
 
+    <!--Clue块-->
+    <servlet>
+        <servlet-name>ClueController</servlet-name>
+        <servlet-class>com.hang.crm.work.controller.ClueController</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>ClueController</servlet-name>
+        <url-pattern>/work/clue/getUserList.sv</url-pattern>
+        <url-pattern>/work/clue/saveClue.sv</url-pattern>
+        <url-pattern>/work/clue/getClueList.sv</url-pattern>
+        <url-pattern>/work/clue/selectById.sv</url-pattern>
+        <url-pattern>/work/clue/getActivityList.sv</url-pattern>
+        <url-pattern>/work/clue/saveguanlian.sv</url-pattern>
+    </servlet-mapping>
 </web-app>
