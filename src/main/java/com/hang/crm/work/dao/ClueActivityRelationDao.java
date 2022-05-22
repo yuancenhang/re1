@@ -5,4 +5,6 @@ import java.util.Map;
 public interface ClueActivityRelationDao {
 
     int saveguanlian(Map<String, Object> map);
+
+    int deleteById(String id);
 }

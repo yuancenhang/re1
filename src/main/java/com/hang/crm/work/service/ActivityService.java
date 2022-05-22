@@ -20,5 +20,7 @@ public interface ActivityService {
 
     Activity loadDetail(String activityId);
 
-    List<Activity> getAllActivityList();
+    List<Activity> getAllActivityList(String clueId);
+
+    List<Activity> getguanlianActivityList(String clueId);
 }

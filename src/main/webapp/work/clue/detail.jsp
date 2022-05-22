@@ -17,6 +17,9 @@
 	var cancelAndSaveBtnDefault = true;
 	
 	$(function(){
+		//刷新已经和当前线索关联的市场活动列表
+		loadguanlianActivityList();
+
 		//关联线索与活动按钮被单击(打开窗口)
 		$("#guanlianBtn").click(function () {
 			openguanlian();
@@ -74,6 +77,7 @@
 			url:"work/clue/getActivityList.sv",
 			type:"get",
 			dataType:"json",
+			data:"clueId=${clue.id}",
 			success:function (data){
 				var html = "";
 				$.each(data,function (i,n) {
@@ -110,10 +114,54 @@
 				success:function (data){
 					if (data.ok){
 						alert("关联成功");
+						loadguanlianActivityList();
+						$("#bundModal").modal("hide");
+					}else {
+						alert("关联失败！");
 					}
 				}
 			})
 		}
+	}
+	//封装的加载已经和某线索关联的市场活动的方法
+	function loadguanlianActivityList() {
+		$.ajax({
+			url:"work/clue/getguanlianActivityList.sv",
+			type:"post",
+			dataType:"json",
+			data:{"clueId":"${clue.id}"},
+			success:function (data){
+				var html = "";
+				$.each(data,function (i,n) {
+					html += '<tr>';
+					html += '<td>'+n.name+'</td>';
+					html += '<td>'+n.startDate+'</td>';
+					html += '<td>'+n.endDate+'</td>';
+					html += '<td>'+n.owner+'</td>';
+					//这里的n.id已经在查询时转换成了tbl_clue_activity_relation关联表的id
+					html += '<td><a href="javascript:void(0);" onclick="jieChuGuanLian(\''+n.id+'\')" style="text-decoration: none;"><span class="glyphicon glyphicon-remove"></span>解除关联</a></td>';
+					html += '</tr>';
+				})
+				$("#guanlianactivityBody").html(html);
+			}
+		})
+	}
+	//封装的解除线索和活动关联的方法
+	function jieChuGuanLian(activityId) {
+		$.ajax({
+			url:"work/clue/jieChuGuanLian.sv",
+			type:"post",
+			dataType:"json",
+			data:{"id":activityId},
+			success:function (data){
+				if (data.ok){
+					alert("解除关联成功！");
+					loadguanlianActivityList();
+				}else {
+					alert("解除关联失败！");
+				}
+			}
+		})
 	}
 </script>
 
@@ -478,21 +526,14 @@
 							<td></td>
 						</tr>
 					</thead>
-					<tbody>
-						<tr>
+					<tbody id="guanlianactivityBody">
+						<%--<tr>
 							<td>发传单</td>
 							<td>2020-10-10</td>
 							<td>2020-10-20</td>
 							<td>zhangsan</td>
 							<td><a href="javascript:void(0);"  style="text-decoration: none;"><span class="glyphicon glyphicon-remove"></span>解除关联</a></td>
-						</tr>
-						<tr>
-							<td>发传单</td>
-							<td>2020-10-10</td>
-							<td>2020-10-20</td>
-							<td>zhangsan</td>
-							<td><a href="javascript:void(0);"  style="text-decoration: none;"><span class="glyphicon glyphicon-remove"></span>解除关联</a></td>
-						</tr>
+						</tr>--%>
 					</tbody>
 				</table>
 			</div>

@@ -5,4 +5,6 @@ import java.util.Map;
 public interface ClueActivityRelationService {
 
     boolean saveguanlian(Map<String, Object> map);
+
+    boolean deleteById(String id);
 }

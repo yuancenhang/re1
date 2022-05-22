@@ -39,8 +39,36 @@ public class ClueController extends HttpServlet {
             getActivityList(request, response);
         }else if ("/work/clue/saveguanlian.sv".equals(path)) {
             saveguanlian(request, response);
+        }else if ("/work/clue/getguanlianActivityList.sv".equals(path)) {
+            getguanlianActivityList(request, response);
+        }else if ("/work/clue/jieChuGuanLian.sv".equals(path)) {
+            deleteById(request, response);
         }
     }
+    /**
+     * 解除线索和活动的关联，即根据ID删除关系表中的记录
+     * @param request  请求对象
+     * @param response 响应对象
+     */
+    private void deleteById(HttpServletRequest request, HttpServletResponse response) {
+        String id = request.getParameter("id");
+        ClueActivityRelationService service = (ClueActivityRelationService) UtilOne.getProxyOfCommit(new ClueActivityRelationServiceImpl());
+        boolean ok = service.deleteById(id);
+        UtilOne.printBoolean(response,ok);
+    }
+
+    /**
+     * 获取已经和某条线索关联的市场活动
+     * @param request  请求对象
+     * @param response 响应对象
+     */
+    private void getguanlianActivityList(HttpServletRequest request, HttpServletResponse response) {
+        String clueId = request.getParameter("clueId");
+        ActivityService service = (ActivityService) UtilOne.getProxyOfCommit(new ActivityServiceImpl());
+        List<Activity> list = service.getguanlianActivityList(clueId);
+        UtilOne.printJson(response,list);
+    }
+
     /**
      * 保存市场活动和线索的关联
      * @param request  请求对象
@@ -59,14 +87,13 @@ public class ClueController extends HttpServlet {
 
     /**
      * 获取市场活动列表
-     * 还没有解决线索和活动重复关联的问题
-     * 已经关联的市场活动不应该再次出现在activity列表上
      * @param request  请求对象
      * @param response 响应对象
      */
     private void getActivityList(HttpServletRequest request, HttpServletResponse response) {
+        String clueId = request.getParameter("clueId");
         ActivityService service = (ActivityService) UtilOne.getProxyOfCommit(new ActivityServiceImpl());
-        List<Activity> list = service.getAllActivityList();
+        List<Activity> list = service.getAllActivityList(clueId);
         UtilOne.printJson(response,list);
     }
 

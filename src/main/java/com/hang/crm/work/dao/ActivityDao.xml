@@ -4,7 +4,7 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.hang.crm.work.dao.ActivityDao">
-
+    <!--新增市场活动-->
     <insert id="activitySave" parameterType="Activity">
         insert into t_activity (
             id,owner,name,startDate,endDate,cost,description,createTime,createBy
@@ -12,7 +12,7 @@
             #{id},#{owner},#{name},#{startDate},#{endDate},#{cost},#{description},#{createTime},#{createBy}
         )
     </insert>
-
+    <!--动态查询满足条件的市场活动-->
     <select id="getActivityList" parameterType="map" resultType="Activity">
         select
         a.id,a.name,u.name as owner,a.startDate,a.endDate
@@ -36,6 +36,7 @@
         order by a.createTime desc
         limit #{pageNo},#{pageSize}
     </select>
+    <!--动态查询满足条件的市场活动的数量-->
     <select id="selectTotal" parameterType="map" resultType="int">
         select
         count(*)
@@ -57,14 +58,14 @@
             </if>
         </where>
     </select>
-
+    <!--根据ID删除市场活动-->
     <delete id="delete">
         delete from t_activity where id in
         <foreach collection="array" item="aid" open="(" close=")" separator=",">
             #{aid}
         </foreach>
     </delete>
-
+    <!--根据ID查询市场活动-->
     <select id="selectById" resultType="Activity">
         select
         a.id,
@@ -84,7 +85,7 @@
         on a.owner=u.id
         where a.id = #{id}
     </select>
-
+    <!--更新市场活动-->
     <update id="editSave" parameterType="map">
         update t_activity set
             owner = #{owner},
@@ -97,7 +98,7 @@
             editBy = #{editBy}
         where id = #{activityId}
     </update>
-
+    <!--查询没有和某条线索关联的所有市场活动-->
     <select id="getAllActivityList" resultType="Activity">
         select
             a.id,
@@ -107,7 +108,19 @@
             a.endDate
         from t_activity a
         join t_user u
-        on a.owner=u.id
+        on a.owner=u.id and a.id not in (select activityId from tbl_clue_activity_relation where clueId=#{cluId})
+    </select>
+    <!--查询已经和某条线索关联的市场活动-->
+    <select id="getguanlianActivityList" resultType="Activity">
+        select car.id as id,
+               u.name as owner,
+               a.name,
+               a.startDate,
+               a.endDate
+        from t_activity a join t_user u
+        on a.owner=u.id and a.id in (select activityId from tbl_clue_activity_relation where clueId=#{cluId})
+        join tbl_clue_activity_relation car
+        on a.id=car.activityId
     </select>
 </mapper>
 

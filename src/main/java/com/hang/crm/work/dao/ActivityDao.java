@@ -20,5 +20,7 @@ public interface ActivityDao {
 
     int editSave(Map<String, Object> map);
 
-    List<Activity> getAllActivityList();
+    List<Activity> getAllActivityList(String clueId);
+
+    List<Activity> getguanlianActivityList(String clueId);
 }

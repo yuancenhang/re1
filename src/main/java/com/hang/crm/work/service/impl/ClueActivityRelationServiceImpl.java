@@ -23,4 +23,10 @@ public class ClueActivityRelationServiceImpl implements ClueActivityRelationServ
         }
         return ids.length==count;
     }
+
+    @Override
+    public boolean deleteById(String id) {
+        int count = 1;
+        return count==relationDao.deleteById(id);
+    }
 }

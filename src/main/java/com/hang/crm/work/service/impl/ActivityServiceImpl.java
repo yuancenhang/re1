@@ -51,8 +51,13 @@ public class ActivityServiceImpl implements ActivityService {
     }
 
     @Override
-    public List<Activity> getAllActivityList() {
-        return dao.getAllActivityList();
+    public List<Activity> getAllActivityList(String clueId) {
+        return dao.getAllActivityList(clueId);
+    }
+
+    @Override
+    public List<Activity> getguanlianActivityList(String clueId) {
+        return dao.getguanlianActivityList(clueId);
     }
 
     @Override //删除活动，设计t_activity表，t_activityRemark备注表
