@@ -1,5 +1,8 @@
 package com.hang.crm.work.domain;
 
+/**
+ * 客户类
+ */
 public class Customer {
 	
 	private String id;

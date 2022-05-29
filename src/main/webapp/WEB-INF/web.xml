@@ -79,5 +79,9 @@
         <url-pattern>/work/clue/saveguanlian.sv</url-pattern>
         <url-pattern>/work/clue/getguanlianActivityList.sv</url-pattern>
         <url-pattern>/work/clue/jieChuGuanLian.sv</url-pattern>
+        <url-pattern>/work/clue/convert.sv</url-pattern>
+        <url-pattern>/work/clue/getActivityListByName.sv</url-pattern>
+        <url-pattern>/work/clue/getAllActivityList.sv</url-pattern>
+        <url-pattern>/work/clue/zhuanHuan.sv</url-pattern>
     </servlet-mapping>
 </web-app>

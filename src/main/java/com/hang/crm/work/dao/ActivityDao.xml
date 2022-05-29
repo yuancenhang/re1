@@ -118,9 +118,23 @@
                a.startDate,
                a.endDate
         from t_activity a join t_user u
-        on a.owner=u.id and a.id in (select activityId from tbl_clue_activity_relation where clueId=#{cluId})
+        on a.owner=u.id
         join tbl_clue_activity_relation car
         on a.id=car.activityId
+        where car.clueId=#{cluId}
+    </select>
+    <!--根据活动名称模糊查询没有和某条线索关联的所有市场活动-->
+    <select id="getActivityListByName" resultType="Activity">
+        select
+            a.id,
+            u.name as owner,
+            a.name,
+            a.startDate,
+            a.endDate
+        from t_activity a
+        join t_user u
+        on a.owner=u.id
+        where a.name like '%' #{aname} '%' and a.id not in (select activityId from tbl_clue_activity_relation where clueId=#{cid})
     </select>
 </mapper>
 

@@ -6,6 +6,7 @@ import com.hang.crm.settings.service.impl.UserServiceImpl;
 import com.hang.crm.utils.UtilOne;
 import com.hang.crm.work.domain.Activity;
 import com.hang.crm.work.domain.Clue;
+import com.hang.crm.work.domain.Tran;
 import com.hang.crm.work.service.ActivityService;
 import com.hang.crm.work.service.ClueActivityRelationService;
 import com.hang.crm.work.service.ClueService;
@@ -43,8 +44,101 @@ public class ClueController extends HttpServlet {
             getguanlianActivityList(request, response);
         }else if ("/work/clue/jieChuGuanLian.sv".equals(path)) {
             deleteById(request, response);
+        }else if ("/work/clue/convert.sv".equals(path)) {
+            selectById2(request, response);
+        }else if ("/work/clue/getActivityListByName.sv".equals(path)) {
+            getActivityListByName(request, response);
+        }else if ("/work/clue/getAllActivityList.sv".equals(path)) {
+            getAllActivityList(request, response);
+        }else if ("/work/clue/zhuanHuan.sv".equals(path)) {
+            zhuanHuan(request, response);
         }
     }
+    /**
+     * 把线索转换成客户和联系人
+     * @param request  请求对象
+     * @param response 响应对象
+     */
+    private void zhuanHuan(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        String clueId = request.getParameter("clueId");
+        String createBy = ((User) request.getSession().getAttribute("user")).getName();
+        Tran tran = null;
+        String flag = request.getParameter("flag");
+        if ("yes".equals(flag)){
+            //要创建交易
+            String activityId = request.getParameter("activityId");
+            String money = request.getParameter("money");
+            String name = request.getParameter("name");
+            String expectedDate = request.getParameter("expectedDate");
+            String stage = request.getParameter("stage");
+            String source = request.getParameter("source");
+            String createTime = UtilOne.getTime();
+            tran = new Tran();
+            tran.setId(UtilOne.getUUID());
+            tran.setMoney(money);
+            tran.setName(name);
+            tran.setExpectedDate(expectedDate);
+            tran.setStage(stage);
+            tran.setSource(source);
+            tran.setActivityId(activityId);
+            tran.setCreateBy(createBy);
+            tran.setCreateTime(createTime);
+        }
+        ClueService service = (ClueService) UtilOne.getProxyOfCommit(new ClueServiceImpl());
+        boolean ok = service.convert(clueId,tran,createBy);
+        System.out.println("===========================全部成功吗？============"+ok);
+        if (ok) response.sendRedirect(request.getContextPath() + "/work/clue/index.jsp");
+    }
+
+    /**
+     * 获取所有的市场活动，分页，动态条件
+     * @param request  请求对象
+     * @param response 响应对象
+     */
+    private void getAllActivityList(HttpServletRequest request, HttpServletResponse response) {
+        String no = request.getParameter("pageNo");
+        int pageNo = Integer.parseInt(no);
+        String size = request.getParameter("pageSize");
+        int pageSize = Integer.parseInt(size);
+        pageNo = (pageNo-1)*pageSize;
+        String activityName = request.getParameter("activityName");
+        Map<String,Object> map = new HashMap<>();
+        map.put("pageNo",pageNo);
+        map.put("pageSize",pageSize);
+        map.put("name",activityName);
+        ActivityService service = (ActivityService) UtilOne.getProxyOfCommit(new ActivityServiceImpl());
+        PageVo<Activity> vo = service.getActivityList(map);
+        UtilOne.printJson(response,vo);
+    }
+
+    /**
+     * 根据活动name查找未和某线索关联的活动
+     * @param request  请求对象
+     * @param response 响应对象
+     */
+    private void getActivityListByName(HttpServletRequest request, HttpServletResponse response) {
+        String aname = request.getParameter("aname");
+        String cid = request.getParameter("cid");
+        Map<String,Object> map = new HashMap<>();
+        map.put("aname",aname);
+        map.put("cid",cid);
+        ActivityService service = (ActivityService) UtilOne.getProxyOfCommit(new ActivityServiceImpl());
+        List<Activity> list = service.getActivityListByName(map);
+        UtilOne.printJson(response,list);
+    }
+    /**
+     * 根据ID获取线索的详细信息，然后转发，加载convert。jsp页面
+     * @param request  请求对象
+     * @param response 响应对象
+     */
+    private void selectById2(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        String clueId = request.getParameter("clueId");
+        ClueService service = (ClueService) UtilOne.getProxyOfCommit(new ClueServiceImpl());
+        Clue clue = service.selectById(clueId);
+        request.setAttribute("clue",clue);
+        request.getRequestDispatcher("/work/clue/convert.jsp").forward(request,response);
+    }
+
     /**
      * 解除线索和活动的关联，即根据ID删除关系表中的记录
      * @param request  请求对象
@@ -86,7 +180,7 @@ public class ClueController extends HttpServlet {
     }
 
     /**
-     * 获取市场活动列表
+     * 查询没有和某条线索关联的所有市场活动
      * @param request  请求对象
      * @param response 响应对象
      */

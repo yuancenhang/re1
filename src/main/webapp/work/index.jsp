@@ -1,6 +1,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <% String basePath = request.getScheme() + "://" + request.getServerName() + ":" +request.getServerPort() + request.getContextPath() + "/"; %>
 <!--_________________________https__________________________localhost______________________8080_______________________crm-->
+<!DOCTYPE html>
 <html>
 <head>
 	<base href=<%=basePath%>>

@@ -28,7 +28,6 @@ public class ActivityServiceImpl implements ActivityService {
         UserDao userDao = UtilOne.getSqlSession().getMapper(UserDao.class);
         List<User> userList = userDao.getUserList();
         map.put("userList",userList);
-        System.out.println("u========"+userList);
         //获取活动信息
         Activity activity = dao.selectById(id);
         map.put("activityName",activity.getName());
@@ -50,14 +49,21 @@ public class ActivityServiceImpl implements ActivityService {
         return dao.selectById(activityId);
     }
 
-    @Override
+    @Override //查询没有和某条线索关联的所有市场活动
     public List<Activity> getAllActivityList(String clueId) {
         return dao.getAllActivityList(clueId);
     }
 
     @Override
     public List<Activity> getguanlianActivityList(String clueId) {
+        System.out.println(dao.getguanlianActivityList(clueId));
         return dao.getguanlianActivityList(clueId);
+
+    }
+
+    @Override
+    public List<Activity> getActivityListByName(Map<String, Object> map) {
+        return dao.getActivityListByName(map);
     }
 
     @Override //删除活动，设计t_activity表，t_activityRemark备注表

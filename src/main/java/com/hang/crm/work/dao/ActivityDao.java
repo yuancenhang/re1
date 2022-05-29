@@ -23,4 +23,6 @@ public interface ActivityDao {
     List<Activity> getAllActivityList(String clueId);
 
     List<Activity> getguanlianActivityList(String clueId);
+
+    List<Activity> getActivityListByName(Map<String, Object> map);
 }

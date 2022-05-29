@@ -98,7 +98,9 @@
         )
     </insert>
 	
-  	
+  	<delete id="deleteById">
+        delete from tbl_clue where id = #{cludId}
+    </delete>
 </mapper>
 
 

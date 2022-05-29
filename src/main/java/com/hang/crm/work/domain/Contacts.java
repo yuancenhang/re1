@@ -1,5 +1,8 @@
 package com.hang.crm.work.domain;
 
+/**
+ * 联系人类
+ */
 public class Contacts {
 	
 	private String id;

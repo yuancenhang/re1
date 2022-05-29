@@ -36,6 +36,13 @@
 		$("#allBox").on("click",function () {
 			$(".box").prop("checked",$("#allBox").prop("checked"));
 		})
+		//回车键被按下，根据活动名称查找未和线索关联的活动
+		$("#search-byName").keydown(function (key){
+			if (key.keyCode==13){
+				loadActivityListByName(key);
+				return false;
+			}
+		})
 
 		$("#remark").focus(function(){
 			if(cancelAndSaveBtnDefault){
@@ -163,6 +170,33 @@
 			}
 		})
 	}
+	//封装的根据活动名称查找未和线索关联的活动
+	function loadActivityListByName(key) {
+		var name = $("#search-byName").val();
+		$.ajax({
+			url:"work/clue/getActivityListByName.sv",
+			type:"get",
+			dataType:"json",
+			data:{
+				"aname":name,
+				"cid":"${clue.id}"
+			},
+			success:function (data){
+				var html = "";
+				$.each(data,function (i,n) {
+					html += '<tr>';
+					html += '<td><input type="checkbox" class="box" id="'+n.id+'"/></td>';
+					html += '<td>'+n.name+'</td>';
+					html += '<td>'+n.startDate+'</td>';
+					html += '<td>'+n.endDate+'</td>';
+					html += '<td>'+n.owner+'</td>';
+					html += '</tr>';
+				})
+				$("#ActivityBody").html(html);
+
+			}
+		})
+	}
 </script>
 
 </head>
@@ -182,7 +216,7 @@
 					<div class="btn-group" style="position: relative; top: 18%; left: 8px;">
 						<form class="form-inline" role="form">
 						  <div class="form-group has-feedback">
-						    <input type="text" class="form-control" style="width: 300px;" placeholder="请输入市场活动名称，支持模糊查询">
+						    <input type="text" class="form-control" id="search-byName" style="width: 300px;" placeholder="请输入市场活动名称，支持模糊查询">
 						    <span class="glyphicon glyphicon-search form-control-feedback"></span>
 						  </div>
 						</form>
@@ -385,7 +419,7 @@
 			<h3>${clue.fullname}${clue.appellation} <small>${clue.company}</small></h3>
 		</div>
 		<div style="position: relative; height: 50px; width: 500px;  top: -72px; left: 700px;">
-			<button type="button" class="btn btn-default" onclick="window.location.href='convert.html';"><span class="glyphicon glyphicon-retweet"></span> 转换</button>
+			<button type="button" class="btn btn-default" onclick="window.location.href='work/clue/convert.sv?clueId=${clue.id}';"><span class="glyphicon glyphicon-retweet"></span> 转换</button>
 			<button type="button" class="btn btn-default" data-toggle="modal" data-target="#editClueModal"><span class="glyphicon glyphicon-edit"></span> 编辑</button>
 			<button type="button" class="btn btn-danger"><span class="glyphicon glyphicon-minus"></span> 删除</button>
 		</div>
@@ -485,7 +519,7 @@
 		
 		<!-- 备注1 -->
 		<div class="remarkDiv" style="height: 60px;">
-			<img title="zhangsan" src="image/user-thumbnail.png" style="width: 30px; height:30px;">
+			<img title="zhangsan" src="img/wo.png" style="width: 30px; height:30px;">
 			<div style="position: relative; top: -40px; left: 40px;" >
 				<h5>哎呦！</h5>
 				<font color="gray">线索</font> <font color="gray">-</font> <b>李四先生-动力节点</b> <small style="color: gray;"> 2017-01-22 10:10:10 由zhangsan</small>
