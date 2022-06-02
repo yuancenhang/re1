@@ -7,6 +7,11 @@
 	<select id="selectByName" resultType="Customer">
         select * from tbl_customer where name=#{name}
     </select>
+
+    <select id="getCustomerListByName" resultType="String">
+        select name from tbl_customer where name like '%' #{name} '%'
+    </select>
+
   	<insert id="save">
         insert into tbl_customer(
             id,

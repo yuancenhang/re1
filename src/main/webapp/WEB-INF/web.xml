@@ -84,4 +84,15 @@
         <url-pattern>/work/clue/getAllActivityList.sv</url-pattern>
         <url-pattern>/work/clue/zhuanHuan.sv</url-pattern>
     </servlet-mapping>
+
+    <!--Tran块-->
+    <servlet>
+        <servlet-name>TranController</servlet-name>
+        <servlet-class>com.hang.crm.work.controller.TranController</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>TranController</servlet-name>
+        <url-pattern>/work/transaction/loadData.sv</url-pattern>
+        <url-pattern>/work/transaction/getCustomerList.sv</url-pattern>
+    </servlet-mapping>
 </web-app>

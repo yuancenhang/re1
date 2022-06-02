@@ -86,7 +86,6 @@ public class ClueController extends HttpServlet {
         }
         ClueService service = (ClueService) UtilOne.getProxyOfCommit(new ClueServiceImpl());
         boolean ok = service.convert(clueId,tran,createBy);
-        System.out.println("===========================全部成功吗？============"+ok);
         if (ok) response.sendRedirect(request.getContextPath() + "/work/clue/index.jsp");
     }
 

@@ -20,9 +20,6 @@ public class ClueServiceImpl implements ClueService {
     ContactsActivityRelationDao contactsActivityRelationDao = UtilOne.getSqlSession().getMapper(ContactsActivityRelationDao.class);
     TranDao tranDao = UtilOne.getSqlSession().getMapper(TranDao.class);
     TranHistoryDao tranHistoryDao = UtilOne.getSqlSession().getMapper(TranHistoryDao.class);
-    //CustomerDao customerDao = UtilOne.getSqlSession().getMapper(CustomerDao.class);
-    //CustomerDao customerDao = UtilOne.getSqlSession().getMapper(CustomerDao.class);
-    //CustomerDao customerDao = UtilOne.getSqlSession().getMapper(CustomerDao.class);
 
     @Override
     public boolean saveClue(Clue clue) {
