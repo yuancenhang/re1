@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.hang.crm.work.dao.ActivityRemarkDao">
+    <!--查满足条件的备注条数-->
+    <select id="getCount" resultType="int">
+        select count(*) from t_activityremark where activityId in
+        <foreach collection="array" item="rid" open="(" close=")" separator=",">
+            #{rid}
+        </foreach>
+    </select>
+
+    <!--删除满足条件的备注-->
+    <delete id="delete">
+        delete from t_activityremark where activityId in
+        <foreach collection="array" item="rid" open="(" close=")" separator=",">
+            #{rid}
+        </foreach>
+    </delete>
+
+    <!--根据活动id查备注,返回list-->
+    <select id="selectByActivityId" resultType="ActivityRemark">
+        select * from t_activityremark where activityId=#{id}
+    </select>
+
+    <!--根据备注id查备注，返回单个remark-->
+    <select id="getRemarkById" resultType="ActivityRemark">
+        select * from t_activityremark where id=#{id}
+    </select>
+
+    <!--根据备注id更新备注-->
+    <update id="updateById">
+        update t_activityremark set
+        noteContent = #{noteContent},
+        editTime = #{editTime},
+        editBy = #{editBy},
+        editFlag = #{editFlag}
+        where id = #{id}
+    </update>
+
+    <!--新增备注-->
+    <insert id="insert">
+        insert into t_activityremark (
+            id,
+            noteContent,
+            createTime,
+            createBy,
+            editFlag,
+            activityId
+        ) values (
+            #{id},
+            #{noteContent},
+            #{createTime},
+            #{createBy},
+            #{editFlag},
+            #{activityId}
+        )
+    </insert>
+
+    <!--删除备注-->
+    <delete id="deleteById">
+        delete from t_activityremark where id = #{id}
+    </delete>
+</mapper>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,21 @@
+$.ajax({
+			url:"work/activity/getRemark.sv",
+			type:"get",
+			dataType:"json",
+			data:"",
+			success:function (data){
+
+			}
+})
+
+
+时间选择器
+
+$(".time").datetimepicker({
+			minView:"month",
+			language:'zh-CN',
+			format:'yyyy-mm-dd',
+			autoclose:true,
+			todayBtn:true,
+			pickerPosition:"bottom-left"
+})

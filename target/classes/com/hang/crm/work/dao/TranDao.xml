@@ -1,0 +1,213 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.hang.crm.work.dao.TranDao">
+
+    <insert id="saveTran">
+        insert into tbl_tran(
+            id,
+            owner,
+            money,
+            name,
+            expectedDate,
+            customerId,
+            stage,
+            type,
+            source,
+            activityId,
+            contactsId,
+            createBy,
+            createTime,
+            description,
+            contactSummary,
+            nextContactTime
+        )values (
+            #{id},
+            #{owner},
+            #{money},
+            #{name},
+            #{expectedDate},
+            #{customerId},
+            #{stage},
+            #{type},
+            #{source},
+            #{activityId},
+            #{contactsId},
+            #{createBy},
+            #{createTime},
+            #{description},
+            #{contactSummary},
+            #{nextContactTime}
+        )
+    </insert>
+
+    <select id="getTranListTotalDT" parameterType="map" resultType="int">
+        select count(*) from tbl_tran t
+        join t_user u on u.id=t.owner
+        join tbl_customer cus on cus.id=t.customerId
+        join tbl_contacts con on con.id=t.contactsId
+        <where>
+            <if test="owner!=null and owner!=''">
+                and u.name like '%' #{owner} '%'
+            </if>
+            <if test="name!=null and name!=''">
+                and t.name like '%' #{name} '%'
+            </if>
+            <if test="stage!=null and stage!=''">
+                and t.stage like '%' #{stage} '%'
+            </if>
+            <if test="type!=null and type!=''">
+                and t.type like '%' #{type} '%'
+            </if>
+            <if test="source!=null and source!=''">
+                and t.source like '%' #{source} '%'
+            </if>
+            <if test="customerIds!=null and customerIds.size()>0">
+                and t.customerId in
+                <foreach collection="customerIds" item="customerId" open="(" close=")" separator=",">
+                    #{customerId}
+                </foreach>
+            </if>
+            <if test="contactsIds!=null and contactsIds.size()>0">
+                and t.contactsId in
+                <foreach collection="contactsIds" item="contactsId" open="(" close=")" separator=",">
+                    #{contactsId}
+                </foreach>
+            </if>
+        </where>
+    </select>
+
+    <select id="getTranListDT" parameterType="map" resultType="Tran">
+        select
+            t.id,
+            u.name as owner,
+            t.money,
+            t.name,
+            t.expectedDate,
+            cus.name as customerId,
+            t.stage,
+            t.type,
+            t.source,
+            t.activityId,
+            con.fullname as contactsId,
+            t.createBy,
+            t.createTime,
+            t.editBy,
+            t.editTime,
+            t.description,
+            t.contactSummary,
+            t.nextContactTime
+        from tbl_tran t
+        join t_user u on u.id=t.owner
+        join tbl_customer cus on cus.id=t.customerId
+        join tbl_contacts con on con.id=t.contactsId
+        <where>
+            <if test="owner!=null and owner!=''">
+                and u.name like '%' #{owner} '%'
+            </if>
+            <if test="name!=null and name!=''">
+                and t.name like '%' #{name} '%'
+            </if>
+            <if test="stage!=null and stage!=''">
+                and t.stage like '%' #{stage} '%'
+            </if>
+            <if test="type!=null and type!=''">
+                and t.type like '%' #{type} '%'
+            </if>
+            <if test="source!=null and source!=''">
+                and t.source like '%' #{source} '%'
+            </if>
+            <if test="customerIds!=null and customerIds.size()>0">
+                and t.customerId in
+                <foreach collection="customerIds" item="customerId" open="(" close=")" separator=",">
+                    #{customerId}
+                </foreach>
+            </if>
+            <if test="contactsIds!=null and contactsIds.size()>0">
+                and t.contactsId in
+                <foreach collection="contactsIds" item="contactsId" open="(" close=")" separator=",">
+                    #{contactsId}
+                </foreach>
+            </if>
+        </where>
+        limit #{pageNo},#{pageSize}
+    </select>
+
+	<insert id="save">
+        insert into tbl_tran(
+            id,
+            owner,
+            money,
+            name,
+            expectedDate,
+            customerId,
+            stage,
+            type,
+            source,
+            activityId,
+            contactsId,
+            createBy,
+            createTime,
+            editBy,
+            editTime,
+            description,
+            contactSummary,
+            nextContactTime
+        )values (
+            #{id},
+            #{owner},
+            #{money},
+            #{name},
+            #{expectedDate},
+            #{customerId},
+            #{stage},
+            #{type},
+            #{source},
+            #{activityId},
+            #{contactsId},
+            #{createBy},
+            #{createTime},
+            #{editBy},
+            #{editTime},
+            #{description},
+            #{contactSummary},
+            #{nextContactTime}
+                        )
+    </insert>
+  	
+</mapper>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

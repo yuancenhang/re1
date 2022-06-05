@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.hang.crm.work.dao.ActivityDao">
+    <!--新增市场活动-->
+    <insert id="activitySave" parameterType="Activity">
+        insert into t_activity (
+            id,owner,name,startDate,endDate,cost,description,createTime,createBy
+        ) values (
+            #{id},#{owner},#{name},#{startDate},#{endDate},#{cost},#{description},#{createTime},#{createBy}
+        )
+    </insert>
+    <!--动态查询满足条件的市场活动-->
+    <select id="getActivityList" parameterType="map" resultType="Activity">
+        select
+        a.id,a.name,u.name as owner,a.startDate,a.endDate
+        from t_activity a
+        join t_user u
+        on a.owner=u.id
+        <where>
+            <if test="owner!=null and owner!=''">
+                and u.name like '%' #{owner} '%'
+            </if>
+            <if test="name!=null and name!=''">
+                and a.name like '%' #{name} '%'
+            </if>
+            <if test="startDate!=null and startDate!=''">
+                and a.startDate &gt; #{startDate}
+            </if>
+            <if test="endDate!=null and endDate!=''">
+                and a.endDate &lt; #{endDate}
+            </if>
+        </where>
+        order by a.createTime desc
+        limit #{pageNo},#{pageSize}
+    </select>
+    <!--动态查询满足条件的市场活动的数量-->
+    <select id="selectTotal" parameterType="map" resultType="int">
+        select
+        count(*)
+        from t_activity a
+        join t_user u
+        on a.owner=u.id
+        <where>
+            <if test="owner!=null and owner!=''">
+                and u.name like '%' #{owner} '%'
+            </if>
+            <if test="name!=null and name!=''">
+                and a.name like '%' #{name} '%'
+            </if>
+            <if test="startDate!=null and startDate!=''">
+                and a.startDate &gt; #{startDate}
+            </if>
+            <if test="endDate!=null and endDate!=''">
+                and a.endDate &lt; #{endDate}
+            </if>
+        </where>
+    </select>
+    <!--根据ID删除市场活动-->
+    <delete id="delete">
+        delete from t_activity where id in
+        <foreach collection="array" item="aid" open="(" close=")" separator=",">
+            #{aid}
+        </foreach>
+    </delete>
+    <!--根据ID查询市场活动-->
+    <select id="selectById" resultType="Activity">
+        select
+        a.id,
+        u.name as owner ,
+        a.name,
+        a.startDate,
+        a.endDate,
+        a.cost,
+        a.description,
+        a.createTime,
+        a.createBy,
+        a.editTime,
+        a.editBy
+        from
+        t_activity a
+        join t_user u
+        on a.owner=u.id
+        where a.id = #{id}
+    </select>
+    <!--更新市场活动-->
+    <update id="editSave" parameterType="map">
+        update t_activity set
+            owner = #{owner},
+            name = #{activityName},
+            startDate = #{startDate},
+            endDate = #{endDate},
+            cost = #{cost},
+            description = #{description},
+            editTime = #{editTime},
+            editBy = #{editBy}
+        where id = #{activityId}
+    </update>
+    <!--查询没有和某条线索关联的所有市场活动-->
+    <select id="getAllActivityList" resultType="Activity">
+        select
+            a.id,
+            u.name as owner,
+            a.name,
+            a.startDate,
+            a.endDate
+        from t_activity a
+        join t_user u
+        on a.owner=u.id and a.id not in (select activityId from tbl_clue_activity_relation where clueId=#{cluId})
+    </select>
+    <!--查询已经和某条线索关联的市场活动-->
+    <select id="getguanlianActivityList" resultType="Activity">
+        select car.id as id,
+               u.name as owner,
+               a.name,
+               a.startDate,
+               a.endDate
+        from t_activity a join t_user u
+        on a.owner=u.id
+        join tbl_clue_activity_relation car
+        on a.id=car.activityId
+        where car.clueId=#{cluId}
+    </select>
+    <!--根据活动名称模糊查询没有和某条线索关联的所有市场活动-->
+    <select id="getActivityListByName" resultType="Activity">
+        select
+            a.id,
+            u.name as owner,
+            a.name,
+            a.startDate,
+            a.endDate
+        from t_activity a
+        join t_user u
+        on a.owner=u.id
+        where a.name like '%' #{aname} '%' and a.id not in (select activityId from tbl_clue_activity_relation where clueId=#{cid})
+    </select>
+</mapper>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
