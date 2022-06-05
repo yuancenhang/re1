@@ -36,4 +36,9 @@ public class TranServiceImpl implements TranService {
         pageVo.setTotal(total);
         return pageVo;
     }
+
+    @Override
+    public boolean saveTran(Tran tran) {
+        return 1==tranDao.saveTran(tran);
+    }
 }

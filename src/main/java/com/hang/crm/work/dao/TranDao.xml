@@ -5,6 +5,44 @@
 
 <mapper namespace="com.hang.crm.work.dao.TranDao">
 
+    <insert id="saveTran">
+        insert into tbl_tran(
+            id,
+            owner,
+            money,
+            name,
+            expectedDate,
+            customerId,
+            stage,
+            type,
+            source,
+            activityId,
+            contactsId,
+            createBy,
+            createTime,
+            description,
+            contactSummary,
+            nextContactTime
+        )values (
+            #{id},
+            #{owner},
+            #{money},
+            #{name},
+            #{expectedDate},
+            #{customerId},
+            #{stage},
+            #{type},
+            #{source},
+            #{activityId},
+            #{contactsId},
+            #{createBy},
+            #{createTime},
+            #{description},
+            #{contactSummary},
+            #{nextContactTime}
+        )
+    </insert>
+
     <select id="getTranListTotalDT" parameterType="map" resultType="int">
         select count(*) from tbl_tran t
         join t_user u on u.id=t.owner

@@ -79,9 +79,52 @@
 				$("#findContacts").modal("show");
 			})
 
+			//活动窗口的确定按钮被单击，把活动填入文本框
+			$("#yesBtnActivity").on("click",function () {
+				writeActivity();
+			})
+
+			//联系人窗口的确定按钮被单击，把联系人填入文本框
+			$("#yesBtnContacts").on("click",function () {
+				writeContacts();
+			})
+
+			//保存按钮被单击，创建交易
+			$("#saveBtn").on("click",function () {
+				$("#tranFrom").submit();
+			})
 		})
+/*
+================下面是封装的函数======================================================================================================================
+ */
 
+		//把活动名称填进文本框
+		function writeActivity() {
+			var xz = $("input[name=activity]:checked");
+			if (xz.length!==1){
+				alert("请选择一个活动！");
+			}else {
+				var id = xz.val();
+				var text = $("#"+id).html();
+				$("#hideAId").val(id);
+				$("#create-activitySrc").val(text);
+				$("#findMarketActivity").modal("hide");
+			}
+		}
 
+		//把联系人名称填进文本框
+		function writeContacts() {
+			var xz = $("input[name=contacts]:checked");
+			if (xz.length!==1){
+				alert("请选择一个联系人！");
+			}else {
+				var id = xz.val();
+				var text = $("#"+id).html();
+				$("#hideCId").val(id);
+				$("#create-contactsName").val(text);
+				$("#findContacts").modal("hide");
+			}
+		}
 
 		//从后台查询满足条件的客户名字，customer，自动补全
 		function getCustomerList() {
@@ -102,7 +145,7 @@
 				delay:1000
 			})
 		}
-		//封装的刷新市场活动列表的方法,分页显示
+		//封装的刷新联系人列表的方法,分页显示
 		function loadContactsList(pageNo,pageSize){
 			$.ajax({
 				url:"work/transaction/getContactsListByName.sv",
@@ -118,8 +161,8 @@
 					var html = "";
 					$.each(data.list,function (i,n) {
 						html += '<tr>';
-						html += '<td><input type="radio" id="'+n.id+'" name="activity"/></td>';
-						html += '<td>'+n.fullname+'</td>';
+						html += '<td><input type="radio" name="contacts" value="'+n.id+'"/></td>';
+						html += '<td id="'+n.id+'">'+n.fullname+'</td>';
 						html += '<td>'+n.email+'</td>';
 						html += '<td>'+n.mphone+'</td>';
 						html += '</tr>';
@@ -161,8 +204,8 @@
 					var html = "";
 					$.each(data.list,function (i,n) {
 						html += '<tr>';
-						html += '<td><input type="radio" name="activity" id="'+n.id+'"/></td>';
-						html += '<td>'+n.name+'</td>';
+						html += '<td><input type="radio" name="activity" value="'+n.id+'"/></td>';
+						html += '<td id="'+n.id+'">'+n.name+'</td>';
 						html += '<td>'+n.startDate+'</td>';
 						html += '<td>'+n.endDate+'</td>';
 						html += '<td>'+n.owner+'</td>';
@@ -230,6 +273,10 @@
 						</tbody>
 					</table>
 				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+					<button type="button" class="btn btn-primary" id="yesBtnActivity">确定</button>
+				</div>
 				<div style="height: 50px; position: relative;top: 20px;">
 					<div id="pageDiv1"></div>
 				</div>
@@ -275,6 +322,10 @@
 						</tbody>
 					</table>
 				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+					<button type="button" class="btn btn-primary" id="yesBtnContacts">确定</button>
+				</div>
 				<div style="height: 50px; position: relative;top: 20px;">
 					<div id="pageDiv2"></div>
 				</div>
@@ -286,16 +337,21 @@
 	<div style="position:  relative; left: 30px;">
 		<h3>创建交易</h3>
 	  	<div style="position: relative; top: -40px; left: 70%;">
-			<button type="button" class="btn btn-primary">保存</button>
+			<button type="button" class="btn btn-primary" id="saveBtn">保存</button>
 			<button type="button" class="btn btn-default">取消</button>
 		</div>
 		<hr style="position: relative; top: -40px;">
 	</div>
-	<form class="form-horizontal" role="form" style="position: relative; top: -30px;">
+	<form class="form-horizontal" id="tranFrom" action="work/transaction/saveTran.sv" role="form" style="position: relative; top: -30px;">
+
+		<input type="hidden" id="hideAId" name="activityId">
+		<input type="hidden" id="hideCId" name="contactsId">
+		<input type="hidden" id="hideCustomerId" name="customerId">
+
 		<div class="form-group">
 			<label for="create-transactionOwner" class="col-sm-2 control-label">所有者<span style="font-size: 15px; color: red;">*</span></label>
 			<div class="col-sm-10" style="width: 300px;">
-				<select class="form-control" id="create-transactionOwner">
+				<select class="form-control" id="create-transactionOwner" name="owner">
 				  <c:forEach items="${userList}" var="u">
 					  <option value="${u.id}">${u.name}</option>
 				  </c:forEach>
@@ -303,18 +359,18 @@
 			</div>
 			<label for="create-amountOfMoney" class="col-sm-2 control-label">金额</label>
 			<div class="col-sm-10" style="width: 300px;">
-				<input type="text" class="form-control" id="create-amountOfMoney">
+				<input type="text" class="form-control" id="create-amountOfMoney" name="money">
 			</div>
 		</div>
 		
 		<div class="form-group">
 			<label for="create-transactionName" class="col-sm-2 control-label">名称<span style="font-size: 15px; color: red;">*</span></label>
 			<div class="col-sm-10" style="width: 300px;">
-				<input type="text" class="form-control" id="create-transactionName">
+				<input type="text" class="form-control" id="create-transactionName" name="name">
 			</div>
 			<label for="create-expectedClosingDate" class="col-sm-2 control-label">预计成交日期<span style="font-size: 15px; color: red;">*</span></label>
 			<div class="col-sm-10" style="width: 300px;">
-				<input type="text" class="form-control time" id="create-expectedClosingDate">
+				<input type="text" class="form-control time" id="create-expectedClosingDate" name="expectedDate">
 			</div>
 		</div>
 		
@@ -325,7 +381,7 @@
 			</div>
 			<label for="create-transactionStage" class="col-sm-2 control-label">阶段<span style="font-size: 15px; color: red;">*</span></label>
 			<div class="col-sm-10" style="width: 300px;">
-			  <select class="form-control" id="create-transactionStage">
+			  <select class="form-control" id="create-transactionStage" name="stage">
 				  <c:forEach items="${stageList}" var="s">
 					  <option value="${s.value}">${s.text}</option>
 				  </c:forEach>
@@ -336,7 +392,7 @@
 		<div class="form-group">
 			<label for="create-transactionType" class="col-sm-2 control-label">类型</label>
 			<div class="col-sm-10" style="width: 300px;">
-				<select class="form-control" id="create-transactionType">
+				<select class="form-control" id="create-transactionType" name="type">
 					<c:forEach items="${transactionTypeList}" var="t">
 						<option value="${t.value}">${t.text}</option>
 					</c:forEach>
@@ -351,7 +407,7 @@
 		<div class="form-group">
 			<label for="create-clueSource" class="col-sm-2 control-label">来源</label>
 			<div class="col-sm-10" style="width: 300px;">
-				<select class="form-control" id="create-clueSource">
+				<select class="form-control" id="create-clueSource" name="source">
 					<c:forEach items="${sourceList}" var="s">
 						<option value="${s.value}">${s.text}</option>
 					</c:forEach>
@@ -373,21 +429,21 @@
 		<div class="form-group">
 			<label for="create-describe" class="col-sm-2 control-label">描述</label>
 			<div class="col-sm-10" style="width: 70%;">
-				<textarea class="form-control" rows="3" id="create-describe"></textarea>
+				<textarea class="form-control" rows="3" id="create-describe" name="description"></textarea>
 			</div>
 		</div>
 		
 		<div class="form-group">
 			<label for="create-contactSummary" class="col-sm-2 control-label">联系纪要</label>
 			<div class="col-sm-10" style="width: 70%;">
-				<textarea class="form-control" rows="3" id="create-contactSummary"></textarea>
+				<textarea class="form-control" rows="3" id="create-contactSummary" name="contactSummary"></textarea>
 			</div>
 		</div>
 		
 		<div class="form-group">
 			<label for="create-nextContactTime" class="col-sm-2 control-label">下次联系时间</label>
 			<div class="col-sm-10" style="width: 300px;">
-				<input type="text" class="form-control time" id="create-nextContactTime">
+				<input type="text" class="form-control time" id="create-nextContactTime" name="nextContactTime">
 			</div>
 		</div>
 		

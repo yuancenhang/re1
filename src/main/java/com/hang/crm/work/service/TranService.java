@@ -8,4 +8,6 @@ import java.util.Map;
 public interface TranService {
 
     PageVo<Tran> getTranListDT(Map<String, Object> map);
+
+    boolean saveTran(Tran tran);
 }

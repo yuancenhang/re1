@@ -134,6 +134,7 @@
 				    <div class="input-group">
 				      <div class="input-group-addon">阶段</div>
 					  <select class="form-control" id="stage">
+						  <option></option>
 					  	<c:forEach items="${stageList}" var="s">
                             <option value="${s.value}">${s.text}</option>
                         </c:forEach>
@@ -145,6 +146,7 @@
 				    <div class="input-group">
 				      <div class="input-group-addon">类型</div>
 					  <select class="form-control" id="type">
+						  <option></option>
                           <c:forEach items="${typeList}" var="s">
                               <option value="${s.value}">${s.text}</option>
                           </c:forEach>
@@ -156,6 +158,7 @@
 				    <div class="input-group">
 				      <div class="input-group-addon">来源</div>
 				      <select class="form-control" id="source">
+						  <option></option>
                           <c:forEach items="${sourceList}" var="s">
                               <option value="${s.value}">${s.text}</option>
                           </c:forEach>
@@ -180,8 +183,6 @@
 				  <button type="button" class="btn btn-default" onclick="window.location.href='work/transaction/edit.sv';"><span class="glyphicon glyphicon-pencil"></span> 修改</button>
 				  <button type="button" class="btn btn-danger"><span class="glyphicon glyphicon-minus"></span> 删除</button>
 				</div>
-				
-				
 			</div>
 			<div style="position: relative;top: 10px;">
 				<table class="table table-hover">

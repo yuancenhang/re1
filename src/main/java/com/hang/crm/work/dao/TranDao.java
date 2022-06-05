@@ -13,4 +13,6 @@ public interface TranDao {
     List<Tran> getTranListDT(Map<String, Object> map);
 
     int getTranListTotalDT(Map<String, Object> map);
+
+    int saveTran(Tran tran);
 }

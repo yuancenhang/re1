@@ -40,8 +40,52 @@ public class TranController extends HttpServlet {
             getActivityListByName(request, response);
         }else if ("/work/transaction/getContactsListByName.sv".equals(path)) {
             getContactsListByName(request, response);
+        }else if ("/work/transaction/saveTran.sv".equals(path)) {
+            saveTran(request, response);
         }
     }
+    /*
+    保存交易
+     */
+    private void saveTran(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        String id = UtilOne.getUUID();
+        String owner = request.getParameter("owner");
+        String money = request.getParameter("money");
+        String name = request.getParameter("name");
+        String expectedDate = request.getParameter("expectedDate");
+        String customerId = request.getParameter("customerId");
+        String stage = request.getParameter("stage");
+        String type = request.getParameter("type");
+        String source = request.getParameter("source");
+        String activityId = request.getParameter("activityId");
+        String contactsId = request.getParameter("contactsId");
+        String createBy = ((User) request.getSession().getAttribute("user")).getName();
+        String createTime = UtilOne.getTime();
+        String description = request.getParameter("description");
+        String contactSummary = request.getParameter("contactSummary");
+        String nextContactTime = request.getParameter("nextContactTime");
+        Tran tran = new Tran();
+        tran.setId(id);
+        tran.setOwner(owner);
+        tran.setMoney(money);
+        tran.setName(name);
+        tran.setExpectedDate(expectedDate);
+        tran.setCustomerId(customerId);
+        tran.setStage(stage);
+        tran.setType(type);
+        tran.setSource(source);
+        tran.setActivityId(activityId);
+        tran.setContactsId(contactsId);
+        tran.setCreateBy(createBy);
+        tran.setCreateTime(createTime);
+        tran.setDescription(description);
+        tran.setContactSummary(contactSummary);
+        tran.setNextContactTime(nextContactTime);
+        TranService service = (TranService) UtilOne.getProxyOfCommit(new TranServiceImpl());
+        boolean ok = service.saveTran(tran);
+        if (ok) response.sendRedirect(request.getContextPath() + "/work/transaction/index.jsp");
+    }
+
     /*
     根据名字查找联系人，返回VO
      */
