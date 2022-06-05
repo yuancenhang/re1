@@ -12,4 +12,6 @@ public interface CustomerDao {
     int save(Customer customer);
 
     List<String> getCustomerListByName(String name);
+
+    List<String> getIdsByName(String customerName);
 }

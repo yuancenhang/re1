@@ -4,6 +4,55 @@
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.hang.crm.work.dao.ContactsDao">
+
+    <select id="getContactsCountByName" parameterType="map" resultType="int">
+        select count(*) from tbl_contacts con join t_user u on u.id=con.owner
+        <where>
+            <if test="fullname!=null and fullname!=''">
+                and con.fullname like '%' #{fullname} '%'
+            </if>
+        </where>
+    </select>
+
+    <select id="getContactsListByName" parameterType="map" resultType="Contacts">
+        select
+            con.id,
+            u.name as owner,
+            con.source,
+            con.customerId,
+            con.fullname,
+            con.appellation,
+            con.email,
+            con.mphone,
+            con.job,
+            con.birth,
+            con.createBy,
+            con.createTime,
+            con.editBy,
+            con.editTime,
+            con.description,
+            con.contactSummary,
+            con.nextContactTime,
+            con.address
+        from tbl_contacts con
+        join t_user u on u.id=con.owner
+        <where>
+            <if test="fullname!=null and fullname!=''">
+                and con.fullname like '%' #{fullname} '%'
+            </if>
+        </where>
+        limit #{pageNo},#{pageSize}
+    </select>
+
+    <select id="getIdsByName" resultType="String">
+        select id from tbl_contacts
+        <where>
+            <if test="contactsName!=null and contactsName!=''">
+                fullname like '%' #{contactsName} '%'
+            </if>
+        </where>
+    </select>
+
 	<insert id="save">
         insert into tbl_contacts(
             id,

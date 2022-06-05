@@ -24,6 +24,12 @@
 <script type="text/javascript" src="jquery/bootstrap-datetimepicker-master/locale/bootstrap-datetimepicker.zh-CN.js"></script>
 	<!--自动补全插件-->
 <script type="text/javascript" src="jquery/bs_typeahead/bootstrap3-typeahead.min.js"></script>
+
+	<!--分页插件-->
+	<!--分页样式-->
+	<script type="text/javascript" src="jquery/bs_pagination/jquery.bs_pagination.min.js"></script>
+	<script type="text/javascript" src="jquery/bs_pagination/en.js"></script>
+	<link href="jquery/bs_pagination/jquery.bs_pagination.min.css" type="text/css" rel="stylesheet"/>
 </head>
 <body>
 	<script type="text/javascript">
@@ -40,22 +46,45 @@
 				}
 			%>
 		}
+		//时间选择器
+		$(".time").datetimepicker({
+			minView:"month",
+			language:'zh-CN',
+			format:'yyyy-mm-dd',
+			autoclose:true,
+			todayBtn:true,
+			pickerPosition:"bottom-left"
+		})
 
 		$(function () {
 			//交易框文本被改变，模糊查询，补全
-			getTranList();
+			getCustomerList();
 
-			//阶段下拉框选择项改变
+			//阶段下拉框选择项改变,填入可能性
 			$("#create-transactionStage").on("change",function () {
 				var text = $("#create-transactionStage").val();
 				var possibility = json[text];
 				$("#create-possibility").val(possibility);
 			})
 
+			//图标被单击，打开活动搜索窗口，加载活动列表
+			$("#openActivity").on("click",function () {
+				loadActivityList3(1,5);
+				$("#findMarketActivity").modal("show");
+			})
+
+			//图标被单击，打开联系人搜索窗口，加载联系人列表
+			$("#openContacts").on("click",function () {
+				loadContactsList(1,5);
+				$("#findContacts").modal("show");
+			})
 
 		})
 
-		function getTranList() {
+
+
+		//从后台查询满足条件的客户名字，customer，自动补全
+		function getCustomerList() {
 			$("#create-accountName").typeahead({
 				source:function (query,process) {
 					$.ajax({
@@ -70,7 +99,94 @@
 						}
 					})
 				},
-				delay:1500
+				delay:1000
+			})
+		}
+		//封装的刷新市场活动列表的方法,分页显示
+		function loadContactsList(pageNo,pageSize){
+			$.ajax({
+				url:"work/transaction/getContactsListByName.sv",
+				type:"post",
+				dataType: "json",
+				data:{
+					"pageNo":pageNo,
+					"pageSize":pageSize,
+					"fullname":$("#searchContacts").val()
+				},
+				success:function (data){
+					//查到的总条数total，activity的集合
+					var html = "";
+					$.each(data.list,function (i,n) {
+						html += '<tr>';
+						html += '<td><input type="radio" id="'+n.id+'" name="activity"/></td>';
+						html += '<td>'+n.fullname+'</td>';
+						html += '<td>'+n.email+'</td>';
+						html += '<td>'+n.mphone+'</td>';
+						html += '</tr>';
+					})
+					$("#ContactsBody").html(html);
+					var pageTotal = data.total%pageSize===0?data.total/pageSize:Math.floor(data.total/pageSize)+1;
+					$("#pageDiv2").bs_pagination({
+						currentPage:pageNo, //第几页
+						rowsPerPage:pageSize, //每页几条
+						maxRowsPerPage: 20, //每页最多几条
+						totalPages:pageTotal, //总页数
+						totalRows:data.total, //总条数
+						visiblePageLinks: 5,  //显示几个卡片，如123456
+						showGoToPage: true,  //是否显示去多少页
+						showRowsPerPage: true,  //是否显示？
+						showRowsInfo: true,  //是否显示？
+						showRowsDefaultInfo: true,  //是否显示？
+						//页面变化，再次调用加载页面函数，从数据库拿数据
+						onChangePage:function (event,data){
+							loadContactsList(data.currentPage,data.rowsPerPage);
+						}
+					})
+				}
+			})
+		}
+		//封装的刷新市场活动列表的方法,分页显示
+		function loadActivityList3(pageNo,pageSize){
+			$.ajax({
+				url:"work/transaction/getActivityListByName.sv",
+				type:"post",
+				dataType: "json",
+				data:{
+					"pageNo":pageNo,
+					"pageSize":pageSize,
+					"name":$("#searchActivity").val()
+				},
+				success:function (data){
+					//查到的总条数total，activity的集合
+					var html = "";
+					$.each(data.list,function (i,n) {
+						html += '<tr>';
+						html += '<td><input type="radio" name="activity" id="'+n.id+'"/></td>';
+						html += '<td>'+n.name+'</td>';
+						html += '<td>'+n.startDate+'</td>';
+						html += '<td>'+n.endDate+'</td>';
+						html += '<td>'+n.owner+'</td>';
+						html += '</tr>';
+					})
+					$("#ActivityBody").html(html);
+					var pageTotal = data.total%pageSize===0?data.total/pageSize:Math.floor(data.total/pageSize)+1;
+					$("#pageDiv1").bs_pagination({
+						currentPage:pageNo, //第几页
+						rowsPerPage:pageSize, //每页几条
+						maxRowsPerPage: 20, //每页最多几条
+						totalPages:pageTotal, //总页数
+						totalRows:data.total, //总条数
+						visiblePageLinks: 5,  //显示几个卡片，如123456
+						showGoToPage: true,  //是否显示去多少页
+						showRowsPerPage: true,  //是否显示？
+						showRowsInfo: true,  //是否显示？
+						showRowsDefaultInfo: true,  //是否显示？
+						//页面变化，再次调用加载页面函数，从数据库拿数据
+						onChangePage:function (event,data){
+							loadActivityList3(data.currentPage,data.rowsPerPage);
+						}
+					})
+				}
 			})
 		}
 	</script>
@@ -88,7 +204,7 @@
 					<div class="btn-group" style="position: relative; top: 18%; left: 8px;">
 						<form class="form-inline" role="form">
 						  <div class="form-group has-feedback">
-						    <input type="text" class="form-control" style="width: 300px;" placeholder="请输入市场活动名称，支持模糊查询">
+						    <input type="text" class="form-control" id="searchActivity" style="width: 300px;" placeholder="请输入市场活动名称，支持模糊查询">
 						    <span class="glyphicon glyphicon-search form-control-feedback"></span>
 						  </div>
 						</form>
@@ -103,23 +219,19 @@
 								<td>所有者</td>
 							</tr>
 						</thead>
-						<tbody>
-							<tr>
+						<tbody id="ActivityBody">
+							<%--<tr>
 								<td><input type="radio" name="activity"/></td>
 								<td>发传单</td>
 								<td>2020-10-10</td>
 								<td>2020-10-20</td>
 								<td>zhangsan</td>
-							</tr>
-							<tr>
-								<td><input type="radio" name="activity"/></td>
-								<td>发传单</td>
-								<td>2020-10-10</td>
-								<td>2020-10-20</td>
-								<td>zhangsan</td>
-							</tr>
+							</tr>--%>
 						</tbody>
 					</table>
+				</div>
+				<div style="height: 50px; position: relative;top: 20px;">
+					<div id="pageDiv1"></div>
 				</div>
 			</div>
 		</div>
@@ -139,7 +251,7 @@
 					<div class="btn-group" style="position: relative; top: 18%; left: 8px;">
 						<form class="form-inline" role="form">
 						  <div class="form-group has-feedback">
-						    <input type="text" class="form-control" style="width: 300px;" placeholder="请输入联系人名称，支持模糊查询">
+						    <input type="text" class="form-control" id="searchContacts" style="width: 300px;" placeholder="请输入联系人名称，支持模糊查询">
 						    <span class="glyphicon glyphicon-search form-control-feedback"></span>
 						  </div>
 						</form>
@@ -153,21 +265,18 @@
 								<td>手机</td>
 							</tr>
 						</thead>
-						<tbody>
-							<tr>
+						<tbody id="ContactsBody">
+							<%--<tr>
 								<td><input type="radio" name="activity"/></td>
 								<td>李四</td>
 								<td>lisi@bjpowernode.com</td>
 								<td>12345678901</td>
-							</tr>
-							<tr>
-								<td><input type="radio" name="activity"/></td>
-								<td>李四</td>
-								<td>lisi@bjpowernode.com</td>
-								<td>12345678901</td>
-							</tr>
+							</tr>--%>
 						</tbody>
 					</table>
+				</div>
+				<div style="height: 50px; position: relative;top: 20px;">
+					<div id="pageDiv2"></div>
 				</div>
 			</div>
 		</div>
@@ -205,7 +314,7 @@
 			</div>
 			<label for="create-expectedClosingDate" class="col-sm-2 control-label">预计成交日期<span style="font-size: 15px; color: red;">*</span></label>
 			<div class="col-sm-10" style="width: 300px;">
-				<input type="text" class="form-control" id="create-expectedClosingDate">
+				<input type="text" class="form-control time" id="create-expectedClosingDate">
 			</div>
 		</div>
 		
@@ -248,16 +357,16 @@
 					</c:forEach>
 				</select>
 			</div>
-			<label for="create-activitySrc" class="col-sm-2 control-label">市场活动源&nbsp;&nbsp;<a href="javascript:void(0);" data-toggle="modal" data-target="#findMarketActivity"><span class="glyphicon glyphicon-search"></span></a></label>
+			<label for="create-activitySrc" class="col-sm-2 control-label">市场活动源&nbsp;&nbsp;<a href="javascript:void(0);" id="openActivity"><span class="glyphicon glyphicon-search"></span></a></label>
 			<div class="col-sm-10" style="width: 300px;">
-				<input type="text" class="form-control" id="create-activitySrc">
+				<input type="text" class="form-control" id="create-activitySrc" readonly>
 			</div>
 		</div>
 		
 		<div class="form-group">
-			<label for="create-contactsName" class="col-sm-2 control-label">联系人名称&nbsp;&nbsp;<a href="javascript:void(0);" data-toggle="modal" data-target="#findContacts"><span class="glyphicon glyphicon-search"></span></a></label>
+			<label for="create-contactsName" class="col-sm-2 control-label">联系人名称&nbsp;&nbsp;<a href="javascript:void(0);" id="openContacts"><span class="glyphicon glyphicon-search"></span></a></label>
 			<div class="col-sm-10" style="width: 300px;">
-				<input type="text" class="form-control" id="create-contactsName">
+				<input type="text" class="form-control" id="create-contactsName" readonly>
 			</div>
 		</div>
 		
@@ -278,7 +387,7 @@
 		<div class="form-group">
 			<label for="create-nextContactTime" class="col-sm-2 control-label">下次联系时间</label>
 			<div class="col-sm-10" style="width: 300px;">
-				<input type="text" class="form-control" id="create-nextContactTime">
+				<input type="text" class="form-control time" id="create-nextContactTime">
 			</div>
 		</div>
 		

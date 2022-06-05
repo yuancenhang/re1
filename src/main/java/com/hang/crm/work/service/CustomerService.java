@@ -6,4 +6,5 @@ import java.util.List;
 
 public interface CustomerService {
     List<String> getCustomerListByName(String name);
+
 }

@@ -94,5 +94,8 @@
         <servlet-name>TranController</servlet-name>
         <url-pattern>/work/transaction/loadData.sv</url-pattern>
         <url-pattern>/work/transaction/getCustomerList.sv</url-pattern>
+        <url-pattern>/work/transaction/loadTranList.sv</url-pattern>
+        <url-pattern>/work/transaction/getActivityListByName.sv</url-pattern>
+        <url-pattern>/work/transaction/getContactsListByName.sv</url-pattern>
     </servlet-mapping>
 </web-app>

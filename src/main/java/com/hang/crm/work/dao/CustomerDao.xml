@@ -12,6 +12,15 @@
         select name from tbl_customer where name like '%' #{name} '%'
     </select>
 
+    <select id="getIdsByName" resultType="String">
+        select id from tbl_customer
+        <where>
+            <if test="customerName!=null and customerName!=''">
+                name like '%' #{customerName} '%'
+            </if>
+        </where>
+    </select>
+
   	<insert id="save">
         insert into tbl_customer(
             id,
