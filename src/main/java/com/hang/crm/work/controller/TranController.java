@@ -7,6 +7,7 @@ import com.hang.crm.utils.UtilOne;
 import com.hang.crm.work.domain.Activity;
 import com.hang.crm.work.domain.Contacts;
 import com.hang.crm.work.domain.Tran;
+import com.hang.crm.work.domain.TranHistory;
 import com.hang.crm.work.service.ActivityService;
 import com.hang.crm.work.service.ContactsService;
 import com.hang.crm.work.service.CustomerService;
@@ -42,8 +43,45 @@ public class TranController extends HttpServlet {
             getContactsListByName(request, response);
         }else if ("/work/transaction/saveTran.sv".equals(path)) {
             saveTran(request, response);
+        }else if ("/work/transaction/detail.sv".equals(path)) {
+            getTranById(request, response);
+        }else if ("/work/transaction/loadTranHistoryList.sv".equals(path)) {
+            getTranHistoryListByTranId(request, response);
         }
     }
+
+    /*
+    通过交易id获取交易历史，展示列表
+     */
+    private void getTranHistoryListByTranId(HttpServletRequest request, HttpServletResponse response) {
+        String tranId = request.getParameter("tranId");
+        TranService service = (TranService) UtilOne.getProxyOfCommit(new TranServiceImpl());
+        List<TranHistory> list = service.getTranHistoryListByTranId(tranId);
+        Map<String,String> map = (Map<String, String>) this.getServletContext().getAttribute("stage");
+        for (TranHistory t : list){
+            String possibility = map.get(t.getStage());
+            t.setPossibility(possibility);
+        }
+        UtilOne.printJson(response,list);
+    }
+
+
+    /*
+    通过id获取交易信息，跳转详细信息页面
+     */
+    private void getTranById(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        String id = request.getParameter("id");
+        TranService service = (TranService) UtilOne.getProxyOfCommit(new TranServiceImpl());
+        Tran tran = service.getTranById(id);
+        request.setAttribute("tran",tran);
+        //获取可能性
+        Map<String,String> map = (Map<String, String>) this.getServletContext().getAttribute("stage");
+        String stage = tran.getStage();
+        String possibility = map.get(stage);
+        request.setAttribute("possibility",possibility);
+        request.getRequestDispatcher("/work/transaction/detail.jsp").forward(request,response);
+    }
+
     /*
     保存交易
      */
@@ -53,7 +91,6 @@ public class TranController extends HttpServlet {
         String money = request.getParameter("money");
         String name = request.getParameter("name");
         String expectedDate = request.getParameter("expectedDate");
-        String customerId = request.getParameter("customerId");
         String stage = request.getParameter("stage");
         String type = request.getParameter("type");
         String source = request.getParameter("source");
@@ -64,13 +101,15 @@ public class TranController extends HttpServlet {
         String description = request.getParameter("description");
         String contactSummary = request.getParameter("contactSummary");
         String nextContactTime = request.getParameter("nextContactTime");
+
+        String customerName = request.getParameter("customerName");
+
         Tran tran = new Tran();
         tran.setId(id);
         tran.setOwner(owner);
         tran.setMoney(money);
         tran.setName(name);
         tran.setExpectedDate(expectedDate);
-        tran.setCustomerId(customerId);
         tran.setStage(stage);
         tran.setType(type);
         tran.setSource(source);
@@ -81,6 +120,9 @@ public class TranController extends HttpServlet {
         tran.setDescription(description);
         tran.setContactSummary(contactSummary);
         tran.setNextContactTime(nextContactTime);
+
+        tran.setCustomerId(customerName);  //暂时把名字装进id里传进去
+
         TranService service = (TranService) UtilOne.getProxyOfCommit(new TranServiceImpl());
         boolean ok = service.saveTran(tran);
         if (ok) response.sendRedirect(request.getContextPath() + "/work/transaction/index.jsp");

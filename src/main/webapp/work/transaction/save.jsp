@@ -6,7 +6,7 @@
 <!--_________________________https__________________________localhost______________________8080_______________________crm-->
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%
-	Map<String,String> map = (Map<String, String>) application.getAttribute("Stage");
+	Map<String,String> map = (Map<String, String>) application.getAttribute("stage");
 	Set<String> set = map.keySet();
 %>
 <!DOCTYPE html>
@@ -46,17 +46,20 @@
 				}
 			%>
 		}
-		//时间选择器
-		$(".time").datetimepicker({
-			minView:"month",
-			language:'zh-CN',
-			format:'yyyy-mm-dd',
-			autoclose:true,
-			todayBtn:true,
-			pickerPosition:"bottom-left"
-		})
+
 
 		$(function () {
+
+			//时间选择器
+			$(".time").datetimepicker({
+				minView:"month",
+				language:'zh-CN',
+				format:'yyyy-mm-dd',
+				autoclose:true,
+				todayBtn:true,
+				pickerPosition:"bottom-left"
+			})
+
 			//交易框文本被改变，模糊查询，补全
 			getCustomerList();
 
@@ -346,7 +349,6 @@
 
 		<input type="hidden" id="hideAId" name="activityId">
 		<input type="hidden" id="hideCId" name="contactsId">
-		<input type="hidden" id="hideCustomerId" name="customerId">
 
 		<div class="form-group">
 			<label for="create-transactionOwner" class="col-sm-2 control-label">所有者<span style="font-size: 15px; color: red;">*</span></label>
@@ -377,7 +379,7 @@
 		<div class="form-group">
 			<label for="create-accountName" class="col-sm-2 control-label">客户名称<span style="font-size: 15px; color: red;">*</span></label>
 			<div class="col-sm-10" style="width: 300px;">
-				<input type="text" class="form-control" id="create-accountName" placeholder="支持自动补全，输入客户不存在则新建">
+				<input type="text" class="form-control" id="create-accountName" name="customerName" placeholder="支持自动补全，输入客户不存在则新建">
 			</div>
 			<label for="create-transactionStage" class="col-sm-2 control-label">阶段<span style="font-size: 15px; color: red;">*</span></label>
 			<div class="col-sm-10" style="width: 300px;">

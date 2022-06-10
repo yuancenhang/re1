@@ -4,7 +4,10 @@ import com.hang.crm.utils.UtilOne;
 import com.hang.crm.work.dao.ContactsDao;
 import com.hang.crm.work.dao.CustomerDao;
 import com.hang.crm.work.dao.TranDao;
+import com.hang.crm.work.dao.TranHistoryDao;
+import com.hang.crm.work.domain.Customer;
 import com.hang.crm.work.domain.Tran;
+import com.hang.crm.work.domain.TranHistory;
 import com.hang.crm.work.service.TranService;
 import com.hang.crm.work.vo.PageVo;
 
@@ -15,6 +18,7 @@ public class TranServiceImpl implements TranService {
     CustomerDao customerDao = UtilOne.getSqlSession().getMapper(CustomerDao.class);
     ContactsDao contactsDao = UtilOne.getSqlSession().getMapper(ContactsDao.class);
     TranDao tranDao = UtilOne.getSqlSession().getMapper(TranDao.class);
+    TranHistoryDao tranHistoryDao = UtilOne.getSqlSession().getMapper(TranHistoryDao.class);
 
     @Override
     public PageVo<Tran> getTranListDT(Map<String, Object> map) {
@@ -39,6 +43,42 @@ public class TranServiceImpl implements TranService {
 
     @Override
     public boolean saveTran(Tran tran) {
-        return 1==tranDao.saveTran(tran);
+        boolean ok = true;
+        Customer customer = customerDao.selectByName(tran.getCustomerId());
+        if (customer == null){  //如果客户不存在，新建，保存
+            customer = new Customer();
+            customer.setId(UtilOne.getUUID());
+            customer.setOwner(tran.getOwner());
+            customer.setName(tran.getCustomerId());
+            customer.setCreateBy(tran.getCreateBy());
+            customer.setCreateTime(tran.getCreateTime());
+            customer.setContactSummary(tran.getContactSummary());
+            customer.setNextContactTime(tran.getNextContactTime());
+            customer.setDescription(tran.getDescription());
+            if (1 != customerDao.save(customer)) ok = false;
+        }
+        tran.setCustomerId(customer.getId());
+        if (1 != tranDao.saveTran(tran)) ok = false;
+        //每次保存交易都创建一条交易历史
+        TranHistory tranHistory = new TranHistory();
+        tranHistory.setId(UtilOne.getUUID());
+        tranHistory.setStage(tran.getStage());
+        tranHistory.setMoney(tran.getMoney());
+        tranHistory.setExpectedDate(tran.getExpectedDate());
+        tranHistory.setCreateTime(tran.getCreateTime());
+        tranHistory.setCreateBy(tran.getCreateBy());
+        tranHistory.setTranId(tran.getId());
+        if (1 != tranHistoryDao.save(tranHistory)) ok = false;
+        return ok;
+    }
+
+    @Override
+    public Tran getTranById(String id) {
+        return tranDao.getTranById(id);
+    }
+
+    @Override
+    public List<TranHistory> getTranHistoryListByTranId(String tranId) {
+        return tranHistoryDao.getTranHistoryListByTranId(tranId);
     }
 }

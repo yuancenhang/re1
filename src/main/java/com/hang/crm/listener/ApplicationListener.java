@@ -37,7 +37,7 @@ public class ApplicationListener implements ServletContextListener {
             String value = resourceBundle.getString(key);
             map.put(key,value);
         }
-        application.setAttribute("Stage",map);
+        application.setAttribute("stage",map);
     }
 
 

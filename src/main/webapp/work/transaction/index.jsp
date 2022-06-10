@@ -56,7 +56,7 @@
                 $.each(data.list,function (i,n) {
                     html += '<tr>';
                     html += '<td><input type="checkbox" id="'+n.id+'" /></td>';
-                    html += '<td><a style="text-decoration: none; cursor: pointer;" onclick="window.location.href=\'work/transaction/detail.jsp\';">'+n.name+'</a></td>';
+                    html += '<td><a style="text-decoration: none; cursor: pointer;" onclick="window.location.href=\'work/transaction/detail.sv?id='+n.id+'\';">'+n.name+'</a></td>';
                     html += '<td>'+n.customerId+'</td>'; //已经把ID处理成名字
                     html += '<td>'+n.stage+'</td>';
                     html += '<td>'+n.type+'</td>';

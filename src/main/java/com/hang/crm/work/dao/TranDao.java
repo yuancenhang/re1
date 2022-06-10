@@ -15,4 +15,7 @@ public interface TranDao {
     int getTranListTotalDT(Map<String, Object> map);
 
     int saveTran(Tran tran);
+
+    Tran getTranById(String id);
+
 }
