@@ -18,4 +18,5 @@ public interface TranDao {
 
     Tran getTranById(String id);
 
+    int updateStage(Tran tran);
 }

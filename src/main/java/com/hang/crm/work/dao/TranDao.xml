@@ -5,7 +5,9 @@
 
 <mapper namespace="com.hang.crm.work.dao.TranDao">
 
-
+    <update id="updateStage">
+        update tbl_tran set stage=#{stage},editBy=#{editBy},editTime=#{editTime} where id=#{id}
+    </update>
 
     <select id="getTranById" resultType="Tran">
         select

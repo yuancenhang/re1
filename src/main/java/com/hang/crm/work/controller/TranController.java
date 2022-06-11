@@ -47,7 +47,38 @@ public class TranController extends HttpServlet {
             getTranById(request, response);
         }else if ("/work/transaction/loadTranHistoryList.sv".equals(path)) {
             getTranHistoryListByTranId(request, response);
+        }else if ("/work/transaction/changeIcon.sv".equals(path)) {
+            changeStage(request, response);
         }
+    }
+
+    /*
+    改变交易的阶段stage
+     */
+    private void changeStage(HttpServletRequest request, HttpServletResponse response) {
+        String tranId = request.getParameter("tranId");
+        String stage = request.getParameter("stage");
+        String money = request.getParameter("money");
+        String expectedDate = request.getParameter("expectedDate");
+        String createBy = ((User) request.getSession().getAttribute("user")).getName();
+        TranHistory tranHistory = new TranHistory();
+        tranHistory.setId(UtilOne.getUUID());
+        tranHistory.setStage(stage);
+        tranHistory.setMoney(money);
+        tranHistory.setExpectedDate(expectedDate);
+        tranHistory.setCreateTime(UtilOne.getTime());
+        tranHistory.setCreateBy(createBy);
+        tranHistory.setTranId(tranId);
+        TranService service = (TranService) UtilOne.getProxyOfCommit(new TranServiceImpl());
+        boolean ok = service.changeStage(tranHistory);
+        Map<String,String> p = (Map<String, String>) this.getServletContext().getAttribute("stage");
+        Map<String,Object> map = new HashMap<>();
+        map.put("possibility",p.get(stage));
+        map.put("editBy",createBy);
+        map.put("editTime",tranHistory.getCreateTime());
+        map.put("stage",stage);
+        map.put("ok",ok);
+        UtilOne.printJson(response,map);
     }
 
     /*

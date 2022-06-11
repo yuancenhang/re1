@@ -56,7 +56,7 @@
                 $.each(data.list,function (i,n) {
                     html += '<tr>';
                     html += '<td><input type="checkbox" id="'+n.id+'" /></td>';
-                    html += '<td><a style="text-decoration: none; cursor: pointer;" onclick="window.location.href=\'work/transaction/detail.jsp\';">'+n.name+'</a></td>';
+                    html += '<td><a style="text-decoration: none; cursor: pointer;" onclick="window.location.href=\'work/transaction/detail.sv?id='+n.id+'\';">'+n.name+'</a></td>';
                     html += '<td>'+n.customerId+'</td>'; //已经把ID处理成名字
                     html += '<td>'+n.stage+'</td>';
                     html += '<td>'+n.type+'</td>';
@@ -183,8 +183,6 @@
 				  <button type="button" class="btn btn-default" onclick="window.location.href='work/transaction/edit.sv';"><span class="glyphicon glyphicon-pencil"></span> 修改</button>
 				  <button type="button" class="btn btn-danger"><span class="glyphicon glyphicon-minus"></span> 删除</button>
 				</div>
-				
-				
 			</div>
 			<div style="position: relative;top: 10px;">
 				<table class="table table-hover">

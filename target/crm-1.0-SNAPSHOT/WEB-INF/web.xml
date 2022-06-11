@@ -98,5 +98,8 @@
         <url-pattern>/work/transaction/getActivityListByName.sv</url-pattern>
         <url-pattern>/work/transaction/getContactsListByName.sv</url-pattern>
         <url-pattern>/work/transaction/saveTran.sv</url-pattern>
+        <url-pattern>/work/transaction/detail.sv</url-pattern>
+        <url-pattern>/work/transaction/loadTranHistoryList.sv</url-pattern>
+        <url-pattern>/work/transaction/changeIcon.sv</url-pattern>
     </servlet-mapping>
 </web-app>
