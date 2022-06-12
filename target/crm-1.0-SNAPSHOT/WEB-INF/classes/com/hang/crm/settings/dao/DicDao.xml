@@ -9,7 +9,7 @@
     </select>
 
     <select id="getDicValueList" resultType="DicValue">
-        select * from tbl_dic_value where typeCode = #{type}
+        select * from tbl_dic_value where typeCode = #{type} order by orderNo
     </select>
 </mapper>
 

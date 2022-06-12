@@ -49,7 +49,18 @@ public class TranController extends HttpServlet {
             getTranHistoryListByTranId(request, response);
         }else if ("/work/transaction/changeIcon.sv".equals(path)) {
             changeStage(request, response);
+        }else if ("/work/transaction/tranEcharts.sv".equals(path)) {
+            tranEcharts(request, response);
         }
+    }
+
+    /*
+    获取交易的阶段和数量，用来显示统计图
+     */
+    private void tranEcharts(HttpServletRequest request, HttpServletResponse response) {
+        TranService service = (TranService) UtilOne.getProxyOfCommit(new TranServiceImpl());
+        Map<String,Object> map = service.tranEcharts();
+        UtilOne.printJson(response,map);
     }
 
     /*

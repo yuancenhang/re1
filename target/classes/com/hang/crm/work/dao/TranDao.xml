@@ -5,6 +5,18 @@
 
 <mapper namespace="com.hang.crm.work.dao.TranDao">
 
+    <select id="echarts" resultType="map">
+        select
+           count(*) as value,
+           stage as name
+        from tbl_tran
+        group by stage
+    </select>
+
+    <select id="getTotal" resultType="int">
+        select count(*) from tbl_tran
+    </select>
+
     <update id="updateStage">
         update tbl_tran set stage=#{stage},editBy=#{editBy},editTime=#{editTime} where id=#{id}
     </update>

@@ -11,6 +11,7 @@ import com.hang.crm.work.domain.TranHistory;
 import com.hang.crm.work.service.TranService;
 import com.hang.crm.work.vo.PageVo;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -93,5 +94,15 @@ public class TranServiceImpl implements TranService {
         if (1!=tranDao.updateStage(tran)) ok = false;
         if (1!=tranHistoryDao.save(tranHistory)) ok = false;
         return ok;
+    }
+
+    @Override
+    public Map<String, Object> tranEcharts() {
+        int total = tranDao.getTotal();
+        List<Map<String,Object>> list = tranDao.echarts();
+        Map<String,Object> map = new HashMap<>();
+        map.put("total",total);
+        map.put("list",list);
+        return map;
     }
 }
